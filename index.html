@@ -833,6 +833,28 @@
     @media(max-width:575px){body{padding-top:112px}.workspace-header{padding:0 10px;gap:10px}.workspace-brand{font-size:.86rem}.workspace-brand img{width:24px;height:24px}.workspace-sidebar{padding:5px 10px}body>.container{padding:0 10px 18px!important}.analytics-card{padding:12px!important}.stat-card{min-height:108px!important;padding:13px!important}.stat-info h2{font-size:1.55rem}.workspace-search input,.form-control,.form-select{font-size:16px}.book-search-field{min-width:0;flex-basis:100%}.book-toolbar>.form-select{width:auto;flex:1 1 105px;font-size:16px;min-width:0}.book-toolbar>#bookCategoryFilter{width:auto;flex:1 1 140px}.availability-toggle{font-size:.74rem}.book-toolbar>#bookResultCount{margin-left:auto}.table-modern tbody td{min-width:78px;padding:9px;font-size:.8rem}.table-modern tbody td:nth-child(2){min-width:155px}.section-title{font-size:1.05rem}}
     @media print{body{padding:0}body>.container{margin:0;width:100%}}
     </style>
+
+    <style id="single-mobile-header">
+    .mobile-search-slot{display:none}
+    @media(max-width:991px){
+        .workspace-header{display:none!important}
+        .workspace-sidebar{top:0!important;padding:9px 12px!important;min-height:56px;background:#fff;border-bottom:1px solid #e2e9f5;box-shadow:0 2px 8px #364c7406}
+        .workspace-sidebar>.container{gap:10px;flex-wrap:wrap}
+        .workspace-sidebar .navbar-brand{flex:0 0 auto;font-size:.78rem;white-space:nowrap;max-width:135px;gap:0}
+        .workspace-sidebar .navbar-brand img{display:block!important;width:23px!important;height:23px!important;margin-right:5px!important}
+        .mobile-search-slot{display:block;flex:1;min-width:70px}
+        .mobile-search-slot .workspace-search{width:100%;min-width:0}
+        .mobile-search-slot .workspace-search form{padding:5px 8px;gap:6px;border-radius:7px;min-height:34px}
+        .mobile-search-slot .workspace-search input{font-size:16px;padding:0;line-height:22px;min-width:0}
+        .mobile-search-slot .workspace-search button{display:none}
+        .workspace-sidebar .navbar-toggler{margin-left:0!important;flex:0 0 28px;min-width:28px;padding:0!important}
+        .workspace-sidebar .navbar-toggler i{font-size:1.5rem!important}
+        .workspace-search-results{position:fixed;top:56px;left:12px;right:12px;max-height:65vh;width:auto}
+        .workspace-sidebar .navbar-collapse.show{max-height:calc(100dvh - 70px);overflow-y:auto}
+        body{padding-top:76px!important}
+    }
+    @media(max-width:359px){.workspace-sidebar{padding-left:8px!important;padding-right:8px!important}.workspace-sidebar>.container{gap:6px}.workspace-sidebar .navbar-brand{font-size:.7rem}.workspace-sidebar .navbar-brand img{width:20px!important;height:20px!important}}
+    </style>
 </head>
 
 <body>
@@ -870,6 +892,7 @@
             <a class="navbar-brand d-flex align-items-center" href="#"><img src="idcon.jpg" alt="Logo"
                     class="d-inline-block align-top me-2"
                     style="height: 35px; width: 35px; object-fit: contain; border-radius: 6px;">IQRA'A Library</a>
+            <div class="mobile-search-slot"></div>
             <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarNav"><i class="bi bi-list fs-1 text-primary"></i></button>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
@@ -1713,6 +1736,18 @@
             const splash=document.getElementById('splashScreen'); if(!splash) return;
             splash.classList.add('fade-out-active');setTimeout(()=>splash.remove(),600);
         }
+
+        document.addEventListener('DOMContentLoaded',()=>{
+            const search=document.querySelector('.workspace-search'),desktop=document.querySelector('.workspace-header'),slot=document.querySelector('.mobile-search-slot'),identity=document.querySelector('.workspace-identity');
+            function placeSearch(){
+                const mobile=window.innerWidth<992;
+                if(mobile && search.parentElement!==slot)slot.append(search);
+                if(!mobile && search.parentElement!==desktop)desktop.insertBefore(search,identity);
+                document.getElementById('workspaceSearch').placeholder=mobile?'Search…':'Search books or students…';
+            }
+            placeSearch();window.addEventListener('resize',placeSearch);
+        });
+
         let workspaceSearchVersion=0;
         async function searchWorkspace(event) {
             event.preventDefault();
