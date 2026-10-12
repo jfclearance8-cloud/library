@@ -855,6 +855,14 @@
     }
     @media(max-width:359px){.workspace-sidebar{padding-left:8px!important;padding-right:8px!important}.workspace-sidebar>.container{gap:6px}.workspace-sidebar .navbar-brand{font-size:.7rem}.workspace-sidebar .navbar-brand img{width:20px!important;height:20px!important}}
     </style>
+
+    <style id="circulation-identity-layout">
+    .id-identity-hint{margin:-8px 0 12px;padding:7px 10px;border-radius:7px;background:#f1f5ff;color:#50649b;font-size:.78rem;line-height:1.5;overflow-wrap:anywhere;border-left:3px solid #8699d7}
+    .id-identity-hint[data-state="found"]{background:#edf8f3;color:#22715b;border-left-color:#58b194}
+    .id-identity-hint[data-state="missing"],.id-identity-hint[data-state="error"]{background:#fff5e9;color:#966223;border-left-color:#ddb16b}
+    .id-identity-hint[hidden]{display:none}
+    @media(max-width:991px){.mobile-search-slot{display:none!important}.workspace-sidebar>.container{justify-content:space-between}.workspace-sidebar .navbar-brand{max-width:none;font-size:.85rem}.workspace-sidebar .navbar-toggler{margin-left:auto!important}.workspace-sidebar .navbar-brand img{width:25px!important;height:25px!important}}
+    </style>
 </head>
 
 <body>
@@ -1748,6 +1756,49 @@
             placeSearch();window.addEventListener('resize',placeSearch);
         });
 
+
+        let identityVersion=0;
+        const identityReady={member:false,book:false},identityError={member:false,book:false};
+        function identityKey(value){return String(value||'').trim().replace(/\s+/g,'').toUpperCase();}
+        function identityMatches(kind,value){
+            const key=identityKey(value);if(!key)return [];
+            return (kind==='book'?allBooksCache:allMembersCache).filter(item=>identityKey(item.id)===key);
+        }
+        function updateIdentityHint(input,kind,canonicalize=false){
+            const hint=document.getElementById(input.id+'Identity');if(!hint)return;
+            const value=input.value.trim();hint.hidden=!value;if(!value){hint.textContent='';return;}
+            if(!identityReady[kind]){hint.dataset.state=identityError[kind]?'error':'loading';hint.textContent=identityError[kind]?'വിവരം ലോഡ് ചെയ്യാനായില്ല. Admin വീണ്ടും തുറന്ന് ശ്രമിക്കൂ.':'വിവരം പരിശോധിക്കുന്നു…';return;}
+            const matches=identityMatches(kind,value);
+            if(matches.length!==1){hint.dataset.state='missing';hint.textContent=matches.length>1?'ഒരേ ID ഒന്നിലധികം റെക്കോർഡുകളിൽ ഉണ്ട്. ID പരിശോധിക്കുക.':kind==='book'?'ഈ ID-യിൽ ബുക്ക് കണ്ടെത്തിയില്ല.':'ഈ ID-യിൽ വിദ്യാർത്ഥിയെ കണ്ടെത്തിയില്ല.';return;}
+            const item=matches[0];hint.dataset.state='found';
+            hint.textContent=kind==='book'?'📖 '+item.title+' · '+item.id:'👤 '+item.name+' · '+item.id+(item.className?' · Class '+item.className:'');
+            if(canonicalize)input.value=String(item.id);
+        }
+        function refreshIdentityHints(){
+            for(const action of ['issue','return','renew'])for(const kind of ['member','book']){
+                const input=document.getElementById(action+(kind==='member'?'MemberId':'BookId'));if(input)updateIdentityHint(input,kind);
+            }
+        }
+        async function loadIdentityData(){
+            const version=++identityVersion;identityReady.member=false;identityReady.book=false;identityError.member=false;identityError.book=false;refreshIdentityHints();
+            await Promise.all(['member','book'].map(async kind=>{
+                try{const data=await requestApi(kind==='member'?'getAllMembers':'getAllBooks');if(version!==identityVersion)return;if(kind==='member')allMembersCache=data;else allBooksCache=data;identityReady[kind]=true;}
+                catch(error){if(version!==identityVersion)return;identityError[kind]=true;}
+                if(version===identityVersion)refreshIdentityHints();
+            }));
+        }
+        document.addEventListener('DOMContentLoaded',()=>{
+            for(const action of ['issue','return','renew']){
+                for(const kind of ['member','book']){
+                    const input=document.getElementById(action+(kind==='member'?'MemberId':'BookId')),hint=document.createElement('div');
+                    hint.id=input.id+'Identity';hint.className='id-identity-hint';hint.hidden=true;hint.setAttribute('role','status');hint.setAttribute('aria-live','polite');hint.setAttribute('aria-atomic','true');
+                    input.setAttribute('aria-describedby',hint.id);input.parentElement.insertAdjacentElement('afterend',hint);
+                    input.addEventListener('input',()=>updateIdentityHint(input,kind));input.addEventListener('blur',()=>updateIdentityHint(input,kind,true));
+                }
+                document.getElementById(action+'Form').addEventListener('reset',()=>setTimeout(refreshIdentityHints,0));
+            }
+        });
+
         let workspaceSearchVersion=0;
         async function searchWorkspace(event) {
             event.preventDefault();
@@ -1884,7 +1935,7 @@
             if (pageId === 'books') loadBooksTable();
             if (pageId === 'members') loadMembersTable();
             if (pageId === 'reports') loadReportsData();
-            if (pageId === 'transactions') { loadSettings(); loadFineDetails(); }
+            if (pageId === 'transactions') { loadSettings(); loadFineDetails(); loadIdentityData(); }
             toggleAdminUIElements();
         }
 
