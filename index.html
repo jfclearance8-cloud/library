@@ -16,7 +16,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
     <!-- Standard SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Bootstrap JS Bundle -->
@@ -862,6 +863,23 @@
     .id-identity-hint[data-state="missing"],.id-identity-hint[data-state="error"]{background:#fff5e9;color:#966223;border-left-color:#ddb16b}
     .id-identity-hint[hidden]{display:none}
     @media(max-width:991px){.mobile-search-slot{display:none!important}.workspace-sidebar>.container{justify-content:space-between}.workspace-sidebar .navbar-brand{max-width:none;font-size:.85rem}.workspace-sidebar .navbar-toggler{margin-left:auto!important}.workspace-sidebar .navbar-brand img{width:25px!important;height:25px!important}}
+    </style>
+
+    <style id="refined-phone-library">
+    @media(max-width:991px){
+        .workspace-sidebar{padding:12px 16px!important;min-height:68px;background:linear-gradient(115deg,#fff,#f7fcff);border-bottom:1px solid #e2edf5;box-shadow:0 3px 15px #09799c07}
+        .workspace-sidebar .navbar-brand{font-size:1.14rem!important;font-weight:800;letter-spacing:-.5px;gap:4px;background:linear-gradient(95deg,#029ac5,#073b4c 80%,#071923);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent!important}
+        .workspace-sidebar .navbar-brand img{width:33px!important;height:33px!important;margin-right:7px!important}
+        .workspace-sidebar .navbar-toggler{color:#06b5e6!important;width:36px;flex-basis:36px}
+        .workspace-sidebar .navbar-toggler i{font-size:1.85rem!important;color:#06b5e6!important}
+        body{padding-top:88px!important;background:#f5f8fd}
+        .workspace-sidebar .navbar-nav{gap:5px;padding-top:14px}.workspace-sidebar .nav-link{padding:11px 14px!important;font-size:.85rem;border-radius:10px!important}.workspace-sidebar .nav-link.active{background:linear-gradient(105deg,#04a8d8,#08789e);box-shadow:0 4px 12px #049dc921}
+        .section-title{font-size:1.12rem}.workspace-subtitle{font-size:.76rem;line-height:1.5}.workspace-eyebrow{color:#758aab}
+        #dashboard>.d-flex:first-child{gap:8px!important;align-items:flex-start!important}.stat-card{min-height:125px!important;padding:15px!important;border-radius:14px}.stat-info{text-align:left!important}.stat-info h2{font-size:1.65rem}.stat-info h6{font-size:.62rem}.stat-card .icon-box{width:29px;height:29px;margin-bottom:10px}
+        .analytics-card{border-radius:14px}.table-modern tbody td{padding:7px 8px!important;font-size:.78rem!important;line-height:1.5}.table-modern thead th{font-size:.62rem;padding:9px 8px}.table-modern tbody td:nth-child(2){min-width:140px}
+        .book-toolbar{gap:7px;margin-bottom:12px}.book-search-field .form-control{background:#fff;border-radius:9px!important}.record-actions{min-width:180px;gap:4px}.record-actions .btn{font-size:.68rem;min-height:30px}
+    }
+    @media(max-width:359px){.workspace-sidebar{padding:10px 12px!important}.workspace-sidebar .navbar-brand{font-size:1rem!important}.workspace-sidebar .navbar-brand img{width:28px!important;height:28px!important}}
     </style>
 </head>
 
@@ -2601,16 +2619,48 @@
         }
 
         // PDF Download
-        async function downloadPDF(elementId, fileName) {
-            const element=document.getElementById(elementId), style=element.getAttribute('style');
-            const title=element.querySelector('.pdf-title'), hidden=[...element.querySelectorAll('.hide-in-pdf')];
-            const displays=hidden.map(el=>el.style.display), titleDisplay=title && title.style.display;
-            try {
-                element.setAttribute('style','background:#fff;padding:25px;display:block;color:#000');
-                if(title) title.style.display='block'; hidden.forEach(el=>el.style.display='none');
-                await html2pdf().set({margin:.5,filename:fileName+'.pdf',image:{type:'jpeg',quality:1},html2canvas:{scale:2,useCORS:true,backgroundColor:'#fff',scrollY:0},jsPDF:{unit:'in',format:'a4',orientation:elementId==='booksPrintArea'?'landscape':'portrait'}}).from(element).save();
-            } catch(error){showError('PDF export failed. Please try again.');}
-            finally { if(title) title.style.display=titleDisplay;hidden.forEach((el,i)=>el.style.display=displays[i]);if(style===null)element.removeAttribute('style');else element.setAttribute('style',style); }
+        let pdfExportBusy=false;
+        async function downloadPDF(elementId,fileName){
+            if(pdfExportBusy)return;pdfExportBusy=true;let root;
+            try{
+                if(typeof html2canvas!=='function'||!window.jspdf?.jsPDF)throw new Error('PDF libraries could not load. Check your internet connection and reload.');
+                Swal.fire({title:'Preparing PDF',text:'Loading records…',allowOutsideClick:false,allowEscapeKey:false,didOpen:()=>Swal.showLoading()});
+                let headers,rows;
+                if(elementId==='booksPrintArea'){
+                    const books=await requestApi('getAllBooks');
+                    headers=['Book ID','Book title','Author','Category','Rack','Total','Available'];
+                    rows=books.map(b=>[b.id,b.title,b.author,b.category,b.rack,b.total,b.available]);
+                }else if(elementId==='membersPrintArea'){
+                    const members=await requestApi('getAllMembers');headers=['Student ID','Name','Class / Department'];rows=members.map(m=>[m.id,m.name,m.className]);
+                }else{
+                    const source=document.getElementById(elementId),table=source?.querySelector('table');
+                    if(!table)throw new Error('No table is available to export.');
+                    const headerCells=[...table.querySelectorAll('thead tr:first-child th')];
+                    const indices=headerCells.map((cell,i)=>cell.classList.contains('hide-in-pdf')?-1:i).filter(i=>i>=0);
+                    headers=indices.map(i=>headerCells[i].textContent.trim());
+                    rows=[...table.querySelectorAll('tbody tr')].filter(row=>!row.hidden&&row.style.display!=='none').map(row=>indices.map(i=>row.cells[i]?.textContent.trim()||''));
+                }
+                if(!rows.length)throw new Error('No records to export.');
+                if(document.fonts?.ready)await document.fonts.ready;
+                const perPage=28,pages=Math.ceil(rows.length/perPage),pdf=new window.jspdf.jsPDF({orientation:'landscape',unit:'mm',format:'a4',compress:true});
+                root=document.createElement('div');root.className='pdf-export-root';root.style.cssText='position:fixed;left:0;top:0;width:1120px;background:white;z-index:-1;pointer-events:none;';document.body.append(root);
+                for(let page=0;page<pages;page++){
+                    Swal.update({text:'Page '+(page+1)+' of '+pages+' · '+rows.length+' records'});
+                    root.replaceChildren();
+                    const paper=document.createElement('div');paper.style.cssText='width:1120px;background:white;color:#111827;padding:24px 30px;font-family:Poppins,"Noto Sans Malayalam",sans-serif;';
+                    const heading=document.createElement('h2');heading.textContent="IQRA'A Library — "+fileName.replace(/_/g,' ');heading.style.cssText='font-size:17px;margin:0 0 4px;color:#075985;';paper.append(heading);
+                    const caption=document.createElement('p');caption.textContent=rows.length+' records · '+new Date().toLocaleDateString('en-IN')+' · Page '+(page+1)+' / '+pages;caption.style.cssText='font-size:10px;color:#64748b;margin:0 0 12px;';paper.append(caption);
+                    const table=document.createElement('table');table.style.cssText='width:100%;border-collapse:collapse;table-layout:fixed;font-size:10px;line-height:1.4;';
+                    const head=document.createElement('tr');headers.forEach((text,i)=>{const cell=document.createElement('th');cell.textContent=text;cell.style.cssText='text-align:left;background:#eaf4fb;border:1px solid #dce5ee;padding:7px 6px;';if(headers.length===7)cell.style.width=[10,31,19,18,6,7,9][i]+'%';head.append(cell);});table.append(head);
+                    rows.slice(page*perPage,(page+1)*perPage).forEach((values,index)=>{const tr=document.createElement('tr');values.forEach(value=>{const td=document.createElement('td');td.textContent=String(value??'');td.style.cssText='vertical-align:top;border:1px solid #e2e8f0;padding:5px 6px;overflow-wrap:anywhere;background:'+(index%2?'#f8fafc':'#fff')+';';tr.append(td);});table.append(tr);});paper.append(table);root.append(paper);
+                    const canvas=await html2canvas(paper,{scale:1.6,backgroundColor:'#fff',useCORS:true,logging:false,scrollX:0,scrollY:0,windowWidth:1200});
+                    const scale=Math.min(277/canvas.width,190/canvas.height),width=canvas.width*scale,height=canvas.height*scale;
+                    if(page)pdf.addPage();pdf.addImage(canvas.toDataURL('image/jpeg',.9),'JPEG',10,10,width,height,undefined,'FAST');canvas.width=1;canvas.height=1;
+                    await new Promise(resolve=>setTimeout(resolve,0));
+                }
+                pdf.save(fileName+'.pdf');Swal.close();
+            }catch(error){showError(error.message||'PDF download failed. Please try again.');}
+            finally{root?.remove();pdfExportBusy=false;}
         }
 
         // --- PWA Installation Logic ---
