@@ -403,19 +403,25 @@ function updateBookDetails_(bookId, d) {
     var issued = sheet_("Transactions").getDataRange().getValues().slice(1).filter(function(t) { return normalizeId(t[1]) === normalizeId(bookId) && t[7] === "Issued"; }).length;
     if (total < issued) throw new Error("Total copies cannot be less than currently issued copies.");
     var values = sheet.getRange(row, 1, 1, 9).getValues()[0];
+    var newId = d.newBookId === undefined ? normalizeId(bookId) : requiredText_(d.newBookId, "Book ID");
+    validateIdChange_(sheet, bookId, newId);
+    values[0] = newId;
     values[1] = title; values[2] = d.author || ""; values[3] = requiredText_(d.category, "Category");
     values[4] = d.rackNo || ""; values[5] = total; values[6] = total - issued;
     if (d.price !== undefined) values[7] = d.price;
     values[8] = d.type || "Issuable";
-    sheet.getRange(row, 1, 1, 9).setValues([values.map(safeCell_)]);
+    updateWithReferences_(sheet, row, values.map(safeCell_), bookId, newId, 2);
     return "പുസ്തകത്തിന്റെ വിവരങ്ങൾ വിജയകരമായി പുതുക്കി!";
 }
 function updateMemberDetails_(memberId, d) {
     var sheet = sheet_("Members"), row = findRow_(sheet, memberId);
     if (!row) throw new Error("Student not found.");
     var name = requiredText_(d.name, "Name");
-    sheet.getRange(row, 2).setValue(safeCell_(name));
-    sheet.getRange(row, 4).setValue(safeCell_(String(d.className || "").trim()));
+    var newId = d.newMemberId === undefined ? normalizeId(memberId) : requiredText_(d.newMemberId, "Student ID");
+    validateIdChange_(sheet, memberId, newId);
+    var values = sheet.getRange(row,1,1,5).getValues()[0];
+    values[0]=newId; values[1]=safeCell_(name); values[3]=safeCell_(String(d.className || "").trim());
+    updateWithReferences_(sheet,row,values,memberId,newId,3);
     return "വിദ്യാർത്ഥിയുടെ വിവരങ്ങൾ വിജയകരമായി പുതുക്കി!";
 }
 // --- API gateway for external connections (e.g. GitHub Pages) ---
@@ -434,6 +440,7 @@ function apiCall(payload) {
         var name = payload.functionName, args = payload.args || [];
         if (!Array.isArray(args)) throw new Error("Invalid arguments.");
         var reads = {
+            getCapabilities: function(){return {editRecordIds:true};},
             testConnection: testConnection, getDashboardData: getDashboardData,
             getAllBooks: getAllBooks, getAllMembers: getAllMembers,
             getCategoriesAndPrefixes: getCategoriesAndPrefixes,
@@ -509,3 +516,29 @@ function deleteBook_(id) { return deleteRecord_("Books",requiredText_(id,"Book I
 function deleteMember_(id) { return deleteRecord_("Members",requiredText_(id,"Student ID"),2); }
 
 function periodStart_(filter) { var date=new Date(); date.setHours(0,0,0,0); if(filter==="week") date.setDate(date.getDate()-7); else if(filter==="month") date.setMonth(date.getMonth()-1); else if(filter==="year") date.setFullYear(date.getFullYear()-1); else date=new Date(2000,0,1); return date; }
+
+function validateIdChange_(sheet,oldId,newId){
+    var oldKey=normalizeId(oldId),newKey=String(newId).trim().replace(/\s+/g,"").toUpperCase();
+    var rows=sheet.getDataRange().getDisplayValues().slice(1),oldMatches=rows.filter(function(r){return normalizeId(r[0])===oldKey;});
+    if(oldMatches.length!==1) throw new Error("This ID occurs more than once. Resolve the duplicate records in the Sheet before editing the ID.");
+    if(rows.some(function(r){return normalizeId(r[0])!==oldKey && String(r[0]).trim().replace(/\s+/g,"").toUpperCase()===newKey;})) throw new Error("The new ID already belongs to another record.");
+    if(/^[=+@]/.test(newId)) throw new Error("ID cannot start with =, + or @.");
+}
+function updateWithReferences_(sheet,row,values,oldId,newId,column){
+    var changes=[],ss=SpreadsheetApp.getActiveSpreadsheet();
+    function prepare(range,newValues){changes.push({range:range,before:range.getValues(),after:newValues});}
+    prepare(sheet.getRange(row,1,1,values.length),[values]);
+    if(normalizeId(oldId)!==normalizeId(newId)){
+        ["Transactions","Reservations"].forEach(function(name){
+            var reference=ss.getSheetByName(name);if(!reference)return;
+            reference.getDataRange().getValues().forEach(function(record,index){
+                if(index>0 && normalizeId(record[column-1])===normalizeId(oldId))prepare(reference.getRange(index+1,column,1,1),[[String(newId)]]);
+            });
+        });
+    }
+    var applied=[];
+    sheet.getRange(row,1).setNumberFormat("@");
+    changes.slice(1).forEach(function(change){change.range.setNumberFormat("@");});
+    try{changes.forEach(function(change){applied.push(change);change.range.setValues(change.after);});}
+    catch(error){var rollbackFailed=false;applied.reverse().forEach(function(change){try{change.range.setValues(change.before);}catch(rollbackError){rollbackFailed=true;}});throw new Error(rollbackFailed?"Update interrupted. Some changes could not be restored; inspect the record and transaction IDs before retrying.":"Update failed and previous values were restored. Please try again.");}
+}
