@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>IQRA'A Library</title>
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#01BEFE">
+    <meta name="theme-color" content="#ffffff">
     <link rel="apple-touch-icon" href="idcon.png">
 
     <link
@@ -739,9 +739,61 @@
     @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
     @media print{.navbar-custom,.hide-in-pdf,.splash-screen{display:none!important}body{background:#fff}.glass-panel{box-shadow:none}.table-responsive{overflow:visible}.container{max-width:100%!important}}
     </style>
+
+    <style id="reference-workspace-layout">
+    :root{--primary:#5465c5;--info:#5465c5;--text-main:#202938;--text-muted:#7a8597}
+    body{background:#f6f9fc;padding-top:96px}
+    .workspace-header{height:72px;position:fixed;inset:0 0 auto 0;background:#fff;border-bottom:1px solid #edf0f5;z-index:1030;display:flex;align-items:center;gap:28px;padding:0 26px}
+    .workspace-brand{width:194px;flex-shrink:0;display:flex;align-items:center;gap:10px;text-decoration:none;color:#202938;font-size:1.15rem;font-weight:700;letter-spacing:-.4px}
+    .workspace-brand img{width:32px;height:32px;border-radius:8px;object-fit:contain}
+    .workspace-search{width:min(540px,48vw);position:relative}.workspace-search form{display:flex;align-items:center;gap:10px;border:1px solid #e7ecf3;background:#fafcfe;border-radius:8px;padding:7px 12px}
+    .workspace-search .bi-search{color:#94a3b8;font-size:.9rem}.workspace-search input{width:100%;min-width:0;border:0;background:transparent;outline:0;color:#273449;font-size:.85rem;padding:3px 0}
+    .workspace-search input::placeholder{color:#8e9aab}.workspace-search button{border:0;background:#eff2f7;color:#7d8a9e;border-radius:4px;font-size:.7rem;min-width:27px;min-height:25px}
+    .workspace-search-results{position:absolute;top:calc(100% + 8px);left:0;right:0;max-height:420px;overflow:auto;background:#fff;border:1px solid #e2e8f0;border-radius:10px;box-shadow:0 12px 36px #25334d1a;padding:10px;z-index:1050}
+    .workspace-search-results button{display:block;width:100%;text-align:left;border:0;background:#fff;color:#334155;font-size:.83rem;padding:10px;border-radius:6px}.workspace-search-results button:hover{background:#edf2ff}
+    .workspace-search-results p{margin:5px;font-size:.8rem;color:#64748b}
+    .workspace-identity{margin-left:auto;display:flex;align-items:center;gap:8px;white-space:nowrap;color:#64748b;font-size:.8rem;font-weight:500}
+    .status-dot{width:7px;height:7px;background:#26a675;border-radius:50%;display:inline-block}
+    .workspace-sidebar{position:fixed;top:72px;left:0;bottom:0;width:220px;border-right:1px solid #edf0f5;border-bottom:0;padding:24px 14px;margin:0;background:#fff;display:block;z-index:1020;overflow-y:auto}
+    .workspace-sidebar>.container{padding:0!important;width:100%;display:block}.workspace-sidebar .navbar-brand,.workspace-sidebar .navbar-toggler{display:none}
+    .workspace-sidebar .navbar-collapse{display:block!important}.workspace-sidebar .navbar-nav{display:flex;flex-direction:column;width:100%;gap:8px;align-items:stretch!important}
+    .workspace-sidebar .nav-link{padding:12px 15px!important;font-size:.85rem;font-weight:500;color:#7d8796!important;border-radius:9px!important;display:flex;align-items:center;gap:9px}
+    .workspace-sidebar .nav-link .bi{font-size:1.05rem}.workspace-sidebar .nav-link.active{background:#edf0ff;color:#6570cc!important;font-weight:600}
+    .workspace-sidebar .nav-link:hover{background:#f4f6fb;color:#4f5fb3!important}.workspace-sidebar #nav-transactions{margin-top:22px!important;border-top:1px solid #eef1f6;border-radius:0!important;padding-top:24px!important}
+    body>.container{width:calc(100% - 220px);margin-left:220px;padding:0 28px 32px!important;max-width:none}
+    .workspace-eyebrow{font-size:.64rem;font-weight:700;letter-spacing:1.4px;color:#8995a7;margin:0 0 3px}
+    .workspace-subtitle{font-size:.8rem;color:#8792a2;margin:4px 0 0}.section-title{font-size:1.3rem;letter-spacing:-.45px;color:#182332}
+    #dashboard>.d-flex:first-child{align-items:center!important;margin-bottom:22px!important}#dashboard>.row.g-3{margin-bottom:22px!important}
+    .glass-panel{border:1px solid #edf1f6;border-radius:10px;box-shadow:0 2px 7px #24344b04}.glass-panel:hover{border-color:#e4eaf2;box-shadow:0 2px 7px #24344b04}
+    .stat-card{min-height:150px;padding:20px 22px;display:block;position:relative}.stat-card .icon-box{min-width:0;width:32px;height:32px;font-size:1rem;border-radius:6px;margin-bottom:13px;background:#f0f4fb}
+    .stat-info h6{font-size:.66rem;font-weight:600;color:#8895a7;letter-spacing:.55px;margin-bottom:6px}.stat-info h2{font-size:2rem;color:#253042;letter-spacing:-.8px;font-weight:700}
+    .icon-blue{color:#6473a0}.icon-green{color:#44a47c;background:#edf8f3!important}.icon-orange{color:#c6904c;background:#fdf5eb!important}.icon-pink{color:#d66574;background:#fff0f2!important}
+    #dashboard .col-6.col-lg-3:last-child .glass-panel{border-color:#f6d8dd;background:#fffcfd}#overdueCount{color:#cf4d5b}
+    .analytics-card{padding:20px}.analytics-card h5{font-size:.9rem;margin-bottom:16px;font-weight:600!important;color:#354151}.analytics-card .table-modern thead th{font-size:.65rem}
+    .badge.bg-primary.bg-opacity-10{background:transparent!important;color:#7f8b9a!important;border:0!important;font-size:.75rem;font-weight:500!important;padding:4px!important}
+    .btn-gradient-primary,.btn-gradient-info{background:#5869bc!important;border-color:#5869bc}.btn-outline-primary{--bs-btn-color:#5869bc;--bs-btn-border-color:#cbd3ee;--bs-btn-hover-bg:#5869bc;--bs-btn-hover-border-color:#5869bc}
+    .text-primary{color:#5869bc!important}.bg-primary{background-color:#5869bc!important}.action-card{padding:22px;text-align:left}.action-card h5{font-size:.95rem}
+    .splash-screen{background:radial-gradient(ellipse at top,#e9f2ff 0%,#f8fbff 45%,#fff 100%)!important;z-index:2000}
+    .splash-logo{box-shadow:0 16px 45px #48629a18;border:1px solid #e7edf5}.splash-title{font-size:2rem;letter-spacing:-.7px;background:none!important;-webkit-text-fill-color:#273449!important;color:#273449}
+    .splash-divider{background:#6573c4}.splash-sponsor{color:#7e8b9d}.splash-sponsor span{color:#485976}.splash-enter{margin-top:20px;border:0;border-radius:10px;background:#5869bc;color:#fff;font-size:.85rem;font-weight:600;padding:12px 25px;box-shadow:0 6px 18px #5869bc26}
+    .splash-loader{margin-top:22px}.loader-bar{background:#6573c4}
+    @media(min-width:1600px){body>.container{padding-left:40px!important;padding-right:40px!important}.workspace-search{width:600px}}
+    @media(max-width:1199px) and (min-width:992px){.workspace-sidebar{width:190px}.workspace-brand{width:164px;font-size:1rem}body>.container{width:calc(100% - 190px);margin-left:190px;padding-left:20px!important;padding-right:20px!important}.stat-card{padding:18px 14px}}
+    @media(max-width:991px){body{padding-top:142px}.workspace-header{padding:0 18px;gap:15px}.workspace-brand{width:auto;font-size:1rem}.workspace-identity{display:none}.workspace-search{flex:1;width:auto}.workspace-sidebar{top:72px;bottom:auto;left:0;right:0;width:100%;padding:8px 18px;border-right:0;border-bottom:1px solid #edf0f5;overflow:visible}.workspace-sidebar>.container{display:flex;flex-wrap:wrap;align-items:center}.workspace-sidebar .navbar-brand{display:block;font-size:.85rem;margin:0}.workspace-sidebar .navbar-brand img{display:none}.workspace-sidebar .navbar-toggler{display:block;margin-left:auto;padding:0 5px;line-height:1}.workspace-sidebar .navbar-collapse:not(.show){display:none!important}.workspace-sidebar .navbar-collapse.show{display:block!important;flex-basis:100%}.workspace-sidebar .navbar-nav{padding-top:12px;padding-bottom:8px}.workspace-sidebar #nav-transactions{margin-top:0!important;border:0;padding-top:12px!important;border-radius:9px!important}body>.container{margin-left:0;width:100%;padding:0 18px 24px!important}.stat-card{min-height:140px}}
+    @media(max-width:575px){.workspace-header{height:68px;padding:0 12px;gap:12px}.workspace-brand{font-size:.88rem;gap:6px}.workspace-brand img{width:25px;height:25px}.workspace-brand span{max-width:96px;line-height:1.2}.workspace-search form{padding:7px 8px;gap:6px}.workspace-search input{font-size:16px}.workspace-search button{display:none}.workspace-sidebar{top:68px;padding:8px 12px}body{padding-top:132px}body>.container{padding-left:12px!important;padding-right:12px!important}.stat-card{padding:16px;min-height:135px}.stat-card .icon-box{width:29px;height:29px;margin-bottom:10px}.stat-info h2{font-size:1.8rem}.stat-info h6{font-size:.62rem}.workspace-subtitle{max-width:260px;line-height:1.55}.workspace-search-results{position:fixed;top:65px;left:12px;right:12px;max-height:60vh}.analytics-card{padding:16px}.splash-title{font-size:1.7rem}.splash-sponsor{font-size:.8rem}}
+    @media print{.workspace-header,.workspace-sidebar{display:none!important}body{padding-top:0}body>.container{width:100%;margin:0;padding:0!important}}
+    </style>
 </head>
 
 <body>
+    <header class="workspace-header">
+        <a class="workspace-brand" href="#" onclick="showPage('dashboard');return false;"><img src="idcon.jpg" alt="IQRAA logo"><span>IQRA'A Library</span></a>
+        <div class="workspace-search">
+            <form onsubmit="searchWorkspace(event)" role="search"><i class="bi bi-search" aria-hidden="true"></i><input id="workspaceSearch" type="search" placeholder="Search books or students…" aria-label="Search books or students" autocomplete="off"><button type="submit" aria-label="Search"><i class="bi bi-arrow-return-left"></i></button></form>
+            <div id="workspaceSearchResults" class="workspace-search-results" hidden aria-live="polite"></div>
+        </div>
+        <div class="workspace-identity"><span class="status-dot"></span><span>Library workspace</span></div>
+    </header>
 
     <!-- Animated Startup Splash Screen -->
     <div id="splashScreen" class="splash-screen">
@@ -755,6 +807,7 @@
                 Sponsored By
                 <span>Sixth Batch Alumni Of Nilambur Markaz</span>
             </p>
+            <button type="button" class="splash-enter" onclick="dismissWelcome()">Enter Library <i class="bi bi-arrow-right ms-2"></i></button>
             <div class="splash-loader">
                 <div class="loader-bar"></div>
             </div>
@@ -762,7 +815,7 @@
     </div>
 
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-custom workspace-sidebar" aria-label="Main navigation">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="#"><img src="idcon.jpg" alt="Logo"
                     class="d-inline-block align-top me-2"
@@ -796,10 +849,9 @@
         <!-- 1. HOME DASHBOARD -->
         <div id="dashboard" class="page-section">
             <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
-                <h4 class="section-title mb-0">System Summary</h4>
+                <div><p class="workspace-eyebrow">OVERVIEW</p><h4 class="section-title mb-0">Library Dashboard</h4><p class="workspace-subtitle">Your library at a glance. Books, students and circulation in one place.</p></div>
                 <span
-                    class="badge bg-primary bg-opacity-10 text-primary border border-primary rounded-pill px-3 py-2 fw-bold"><i
-                        class="bi bi-lightning-charge-fill me-1"></i>Live Data</span>
+                    class="badge bg-primary bg-opacity-10 text-primary border border-primary rounded-pill px-3 py-2 fw-bold"><i class="bi bi-calendar3 me-1"></i><span id="workspaceDate">Live Data</span></span>
             </div>
 
             <!-- PWA Install Banner -->
@@ -1615,6 +1667,37 @@
         })();
 
 
+
+        function dismissWelcome() {
+            const splash=document.getElementById('splashScreen'); if(!splash) return;
+            splash.classList.add('fade-out-active');setTimeout(()=>splash.remove(),600);
+        }
+        let workspaceSearchVersion=0;
+        async function searchWorkspace(event) {
+            event.preventDefault();
+            const query=document.getElementById('workspaceSearch').value.trim(), results=document.getElementById('workspaceSearchResults');
+            const version=++workspaceSearchVersion; results.replaceChildren();
+            if(!query){results.hidden=true;return;} results.hidden=false;
+            const status=document.createElement('p');status.textContent='Searching books and students…';results.append(status);
+            try {
+                const [books,members]=await Promise.all([requestApi('getAllBooks'),requestApi('getAllMembers')]);
+                if(version!==workspaceSearchVersion)return;results.replaceChildren();
+                const lower=query.toLocaleLowerCase();
+                const matchedBooks=books.filter(b=>[b.id,b.title,b.author,b.category].some(v=>String(v||'').toLocaleLowerCase().includes(lower))).slice(0,6);
+                const matchedMembers=members.filter(m=>[m.id,m.name,m.className].some(v=>String(v||'').toLocaleLowerCase().includes(lower))).slice(0,6);
+                for(const [kind,items] of [['book',matchedBooks],['student',matchedMembers]])for(const item of items){
+                    const button=document.createElement('button');button.type='button';button.textContent=(kind==='book'?'Book · ':'Student · ')+item.id+' — '+(item.title||item.name);
+                    button.addEventListener('click',()=>{const page=kind==='book'?'books':'members';const field=document.getElementById(kind==='book'?'searchBookInput':'searchMemberInput');field.value=String(item.id);results.hidden=true;showPage(page);});results.append(button);
+                }
+                if(!matchedBooks.length && !matchedMembers.length){const empty=document.createElement('p');empty.textContent='No matching books or students.';results.append(empty);}
+            } catch(error){if(version!==workspaceSearchVersion)return;results.replaceChildren();status.textContent=error.message;results.append(status);}
+        }
+        document.addEventListener('DOMContentLoaded',()=>{
+            const date=document.getElementById('workspaceDate');if(date)date.textContent=new Intl.DateTimeFormat('en-IN',{weekday:'short',day:'numeric',month:'short',year:'numeric'}).format(new Date());
+            document.addEventListener('click',event=>{if(!event.target.closest('.workspace-search'))document.getElementById('workspaceSearchResults').hidden=true;});
+            document.getElementById('workspaceSearch').addEventListener('keydown',event=>{if(event.key==='Escape'){workspaceSearchVersion++;document.getElementById('workspaceSearchResults').hidden=true;}});
+        });
+
         let booksLoadVersion=0, membersLoadVersion=0, allMembersCache=[];
         function escapeHtml(value) { return String(value == null ? '' : value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch])); }
         document.addEventListener('click', event => {
@@ -1686,7 +1769,7 @@
                         splash.remove();
                     }, 600);
                 }
-            }, 500);
+            }, 3000);
 
             // Close navbar when clicking outside
             document.addEventListener('click', (event) => {
