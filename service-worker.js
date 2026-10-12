@@ -1,43 +1,10 @@
-const CACHE_NAME = 'iqra-library-cache-v15';
-const ASSETS = [
-  './',
-  './index.html',
-  './manifest.json',
-  './idcon.png',
-  './idcon.jpg'
-];
-
-// Install Service Worker
-self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
-      console.log('SW: Caching App Shell');
-      return cache.addAll(ASSETS);
-    })
-  );
-});
-
-// Activate Service Worker
-self.addEventListener('activate', event => {
-  event.waitUntil(
-    caches.keys().then(keys => {
-      return Promise.all(
-        keys.map(key => {
-          if (key !== CACHE_NAME) {
-            console.log('SW: Clearing Old Cache', key);
-            return caches.delete(key);
-          }
-        })
-      );
-    })
-  );
-});
-
-// Fetch resources
-self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request).then(cachedResponse => {
-      return cachedResponse || fetch(event.request);
-    })
-  );
+const CACHE='iqraa-ui-v2';
+self.addEventListener('install',()=>self.skipWaiting());
+self.addEventListener('activate',event=>event.waitUntil((async()=>{for(const name of await caches.keys()) if(name!==CACHE && (name.startsWith('iqraa') || name.startsWith('library'))) await caches.delete(name);await self.clients.claim();})()));
+self.addEventListener('fetch',event=>{
+ const request=event.request,url=new URL(request.url);
+ // Never cache API responses, writes, sessions, or external resources.
+ if(request.method!=='GET' || url.origin!==self.location.origin) return;
+ if(!(/\.(html|css|js|png|jpg|json)$/.test(url.pathname)||request.mode==='navigate')) return;
+ event.respondWith((async()=>{try{const response=await fetch(request,{cache:'no-cache'});if(response.ok){const cache=await caches.open(CACHE);await cache.put(request,response.clone());}return response;}catch(error){const cached=await caches.match(request);if(cached)return cached;throw error;}})());
 });
