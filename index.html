@@ -1,0 +1,2427 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <base target="_top">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>IQRA'A Library</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#01BEFE">
+    <link rel="apple-touch-icon" href="idcon.png">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+Malayalam:wght@400;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- Standard SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #01BEFE;
+            --secondary: #000000;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --info: #01BEFE;
+            --text-main: #000000;
+            --text-muted: #555555;
+        }
+
+        /* Clean Solid Background instead of Glass */
+        body {
+            background-color: #f1f5f9;
+            font-family: 'Poppins', 'Noto Sans Malayalam', sans-serif;
+            color: var(--text-main);
+        }
+
+        /* Clean Solid Panels */
+        .glass-panel {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-top: 5px solid var(--primary);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .glass-panel:hover {
+            border-top-color: #000000;
+            box-shadow: 0 10px 30px rgba(1, 190, 254, 0.10);
+        }
+
+        .navbar-custom {
+            background: #ffffff;
+            padding: 15px 0;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.04);
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.6rem;
+        }
+
+        .nav-link {
+            font-weight: 600;
+            color: var(--text-muted) !important;
+            margin: 0 10px;
+            transition: 0.3s;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--primary) !important;
+            transform: translateY(-2px);
+        }
+
+        .nav-link.active {
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .stat-card {
+            padding: 25px;
+            transition: 0.4s;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(1, 190, 254, 0.15);
+        }
+
+        .icon-box {
+            min-width: 70px;
+            height: 70px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            background: #f8fafc;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .icon-blue {
+            color: var(--primary);
+        }
+
+        .icon-orange {
+            color: #ea580c;
+        }
+
+        .icon-green {
+            color: #16a34a;
+        }
+
+        .icon-pink {
+            color: #db2777;
+        }
+
+        .stat-info h6 {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-bottom: 2px;
+        }
+
+        .stat-info h2 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin: 0;
+            line-height: 1;
+        }
+
+        .action-card {
+            padding: 40px 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.4s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+            border: 1px solid transparent;
+        }
+
+        .action-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+            border-color: var(--primary);
+        }
+
+        .action-icon {
+            font-size: 4rem;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+        .btn-modern {
+            border-radius: 50px;
+            padding: 12px 30px;
+            font-weight: 600;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border: none;
+        }
+
+        .btn-modern:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-gradient-primary {
+            background: linear-gradient(135deg, var(--primary), #000000);
+            color: white;
+        }
+
+        .btn-gradient-success {
+            background: linear-gradient(135deg, var(--success), #34d399);
+            color: white;
+        }
+
+        .btn-gradient-warning {
+            background: linear-gradient(135deg, var(--warning), #fbbf24);
+            color: white;
+        }
+
+        .btn-gradient-info {
+            background: linear-gradient(135deg, var(--info), #000000);
+            color: white;
+        }
+
+        .section-title {
+            font-weight: 800;
+            font-size: 1.4rem;
+            padding-left: 15px;
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .section-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 10%;
+            height: 80%;
+            width: 5px;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+            border-radius: 10px;
+        }
+
+        .analytics-card {
+            padding: 25px;
+        }
+
+        .table-modern th {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            border-bottom: 2px solid rgba(0, 0, 0, 0.05);
+            padding-bottom: 15px;
+            white-space: nowrap;
+        }
+
+        .table-modern td {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+            vertical-align: middle;
+            font-weight: 500;
+        }
+
+        .badge-custom {
+            padding: 6px 12px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            border: 1px solid #e2e8f0;
+            display: inline-block;
+        }
+
+        .search-box {
+            background: #ffffff;
+            border-radius: 50px;
+            padding: 15px 30px;
+            border: 1px solid #e2e8f0;
+            width: 100%;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .search-box:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(1, 190, 254, 0.20);
+        }
+
+        .page-section {
+            display: none;
+            animation: slideUp 0.4s ease-out;
+        }
+
+        #dashboard {
+            display: block;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-content {
+            border-radius: 24px;
+            background: #ffffff;
+            border: none;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .form-control,
+        .form-select {
+            border-radius: 12px;
+            padding: 12px 15px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            box-shadow: 0 0 0 4px rgba(1, 190, 254, 0.15);
+            border-color: var(--primary);
+            background: #fff;
+        }
+
+        /* Solid Background SweetAlert Fixes */
+        .swal2-popup {
+            border-radius: 20px !important;
+            font-family: 'Poppins', 'Noto Sans Malayalam', sans-serif !important;
+            padding: 2em !important;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1) !important;
+            background: #ffffff !important;
+        }
+
+        .swal2-title {
+            font-weight: 700 !important;
+            color: var(--text-main) !important;
+            font-size: 1.5rem !important;
+        }
+
+        .swal2-html-container {
+            font-size: 1.1rem !important;
+            color: var(--text-muted) !important;
+        }
+
+        /* Floating Labels Adjustments for Forms */
+        .form-floating>.form-control {
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            background-color: #f8fafc;
+        }
+
+        .form-floating>.form-control:focus {
+            background-color: #fff;
+            border-color: var(--primary);
+        }
+
+        .form-floating>label {
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* Custom Dropdown Design */
+        .custom-dropdown .btn {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 50px;
+            padding: 6px 18px;
+            font-weight: 600;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .custom-dropdown .dropdown-menu {
+            border-radius: 16px;
+            padding: 8px;
+            border: none;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+            min-width: 180px;
+            margin-top: 5px !important;
+        }
+
+        .custom-dropdown .dropdown-item {
+            border-radius: 10px;
+            padding: 10px 15px;
+            font-weight: 500;
+            color: var(--text-main);
+            margin-bottom: 2px;
+            transition: 0.2s;
+        }
+
+        .custom-dropdown .dropdown-item:hover {
+            background: rgba(1, 190, 254, 0.08);
+            color: var(--primary);
+            transform: translateX(3px);
+        }
+
+        .custom-dropdown .dropdown-item.active {
+            background: var(--primary);
+            color: #fff;
+            box-shadow: 0 4px 10px rgba(1, 190, 254, 0.30);
+        }
+
+        /* Modern Toggle Switch */
+        .form-switch .form-check-input {
+            width: 3em;
+            height: 1.5em;
+            cursor: pointer;
+            border: none;
+            background-color: #cbd5e1;
+            transition: 0.3s;
+            margin-top: 0;
+        }
+
+        .form-switch .form-check-input:checked {
+            background-color: var(--primary);
+        }
+
+        .form-switch .form-check-input:focus {
+            box-shadow: none;
+            border-color: transparent;
+        }
+
+        .cat-badge {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            color: var(--text-main);
+            padding: 8px 15px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
+        }
+
+        /* Responsive Adjustments (Mobile 2x2 Grid) */
+        @media (max-width: 768px) {
+            .header-actions {
+                flex-direction: column;
+                width: 100%;
+                gap: 10px;
+            }
+
+            .header-actions button {
+                width: 100%;
+            }
+
+            .table-responsive {
+                border-radius: 15px;
+                border: 1px solid #e2e8f0;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .stat-card {
+                padding: 15px;
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+
+            .icon-box {
+                min-width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+            }
+
+            .stat-info h2 {
+                font-size: 1.5rem;
+            }
+
+            .stat-info h6 {
+                font-size: 0.7rem;
+            }
+
+            .analytics-card {
+                padding: 12px !important;
+            }
+
+            .table-modern th,
+            .table-modern td {
+                padding: 8px 4px !important;
+                font-size: 0.72rem !important;
+            }
+
+            .table-modern th {
+                white-space: normal !important;
+            }
+
+            .table-modern td div.fw-bold {
+                font-size: 0.78rem !important;
+                word-break: break-word;
+            }
+
+            .table-modern td div.fs-5 {
+                font-size: 0.85rem !important;
+            }
+
+            .badge-custom {
+                padding: 4px 6px !important;
+                font-size: 0.65rem !important;
+                display: inline-block;
+            }
+
+            .table-responsive {
+                overflow-x: hidden !important;
+                border-radius: 12px;
+            }
+        }
+
+        /* Override Bootstrap Primary Colors with #01BEFE and Black */
+        .text-primary {
+            color: var(--primary) !important;
+        }
+
+        .bg-primary {
+            background-color: var(--primary) !important;
+        }
+
+        .border-primary {
+            border-color: var(--primary) !important;
+        }
+
+        .btn-primary {
+            background-color: var(--primary) !important;
+            border-color: var(--primary) !important;
+            color: #000000 !important;
+        }
+
+        .btn-primary:hover,
+        .btn-primary:focus {
+            background-color: #0096cb !important;
+            border-color: #0096cb !important;
+            color: #ffffff !important;
+        }
+
+        .btn-outline-primary {
+            color: var(--primary) !important;
+            border-color: var(--primary) !important;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: var(--primary) !important;
+            border-color: var(--primary) !important;
+            color: #000000 !important;
+        }
+
+        .badge.bg-primary.bg-opacity-10 {
+            background-color: rgba(1, 190, 254, 0.1) !important;
+            color: var(--primary) !important;
+        }
+
+        /* Animated Startup Splash Screen */
+        .splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(circle at center, #0d1b2a 0%, #010409 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+            transition: opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1), transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+            opacity: 1;
+            color: #ffffff;
+            overflow: hidden;
+        }
+
+        .splash-screen.fade-out-active {
+            opacity: 0;
+            transform: scale(1.05);
+            pointer-events: none;
+        }
+
+        .splash-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 90%;
+            text-align: center;
+        }
+
+        .splash-logo-container {
+            position: relative;
+            margin-bottom: 25px;
+            animation: splashLogoIntro 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        .splash-logo {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+            border-radius: 24px;
+            border: 4px solid var(--primary);
+            box-shadow: 0 0 40px rgba(1, 190, 254, 0.4);
+        }
+
+        .splash-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            margin-bottom: 5px;
+            background: linear-gradient(45deg, #ffffff, var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            opacity: 0;
+            animation: splashFadeInUp 0.8s ease-out 0.5s forwards;
+        }
+
+        .splash-divider {
+            width: 60px;
+            height: 3px;
+            background-color: var(--primary);
+            border-radius: 10px;
+            margin: 15px 0 20px 0;
+            opacity: 0;
+            animation: splashExpand 0.8s ease-out 0.8s forwards;
+        }
+
+        .splash-sponsor {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #8892b0;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: splashFadeInUp 0.8s ease-out 1s forwards;
+        }
+
+        .splash-sponsor span {
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 1.1rem;
+            display: block;
+            margin-top: 5px;
+            letter-spacing: 0.5px;
+            text-transform: none;
+        }
+
+        .splash-loader {
+            width: 150px;
+            height: 4px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            opacity: 0;
+            animation: splashFadeIn 0.8s ease-out 1.2s forwards;
+        }
+
+        .loader-bar {
+            width: 100%;
+            height: 100%;
+            background-color: var(--primary);
+            border-radius: 10px;
+            transform: translateX(-100%);
+            animation: loaderFill 2.5s cubic-bezier(0.4, 0, 0.2, 1) 1.2s forwards;
+        }
+
+        /* Keyframe Animations */
+        @keyframes splashLogoIntro {
+            0% {
+                transform: scale(0.3) rotate(-10deg);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        @keyframes splashFadeInUp {
+            0% {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes splashFadeIn {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes splashExpand {
+            0% {
+                width: 0;
+                opacity: 0;
+            }
+
+            100% {
+                width: 60px;
+                opacity: 1;
+            }
+        }
+
+        @keyframes loaderFill {
+            0% {
+                transform: translateX(-100%);
+            }
+
+            100% {
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Animated Startup Splash Screen -->
+    <div id="splashScreen" class="splash-screen">
+        <div class="splash-content">
+            <div class="splash-logo-container">
+                <img src="idcon.jpg" alt="IQRA'A Library Logo" class="splash-logo">
+            </div>
+            <h1 class="splash-title">IQRA'A Library</h1>
+            <div class="splash-divider"></div>
+            <p class="splash-sponsor">
+                Sponsored By
+                <span>Sixth Batch Alumni Of Nilambur Markaz</span>
+            </p>
+            <div class="splash-loader">
+                <div class="loader-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="#"><img src="idcon.jpg" alt="Logo"
+                    class="d-inline-block align-top me-2"
+                    style="height: 35px; width: 35px; object-fit: contain; border-radius: 6px;">IQRA'A Library</a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNav"><i class="bi bi-list fs-1 text-primary"></i></button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav align-items-center">
+                    <li class="nav-item"><a class="nav-link active" id="nav-dashboard"
+                            onclick="showPage('dashboard')"><i class="bi bi-house-door-fill me-1"></i> Dashboard</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" id="nav-books" onclick="showPage('books')"><i
+                                class="bi bi-book-fill me-1"></i> Books</a></li>
+                    <li class="nav-item"><a class="nav-link" id="nav-members" onclick="showPage('members')"><i
+                                class="bi bi-mortarboard-fill me-1"></i> Students</a></li>
+                    <li class="nav-item"><a class="nav-link" id="nav-transactions" onclick="showPage('transactions')"><i
+                                class="bi bi-shield-lock-fill me-1"></i> Admin</a></li>
+                    <li class="nav-item"><a class="nav-link" id="nav-reports" onclick="showPage('reports')"><i
+                                class="bi bi-bar-chart-fill me-1"></i> Reports</a></li>
+                    <li class="nav-item d-none" id="installNavbarItem"><a class="nav-link text-success fw-bold" href="#"
+                            onclick="triggerPwaInstall(); return false;"><i class="bi bi-download me-1"></i> Install
+                            App</a></li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container pb-5">
+
+        <!-- 1. HOME DASHBOARD -->
+        <div id="dashboard" class="page-section">
+            <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+                <h4 class="section-title mb-0">System Summary</h4>
+                <span
+                    class="badge bg-primary bg-opacity-10 text-primary border border-primary rounded-pill px-3 py-2 fw-bold"><i
+                        class="bi bi-lightning-charge-fill me-1"></i>Live Data</span>
+            </div>
+
+            <!-- PWA Install Banner -->
+            <div id="pwaInstallBanner"
+                class="alert alert-success d-none border-0 shadow-sm rounded-4 p-3 mb-4 d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="fs-1 text-success"><i class="bi bi-phone-vibrate"></i></div>
+                    <div>
+                        <h6 class="fw-bold mb-1">Install IQRA'A Library App</h6>
+                        <p class="small text-muted mb-0">ആപ്പായി ഇൻസ്റ്റാൾ ചെയ്ത് വേഗത്തിൽ ഉപയോഗിക്കൂ!</p>
+                    </div>
+                </div>
+                <button class="btn btn-success rounded-pill px-4 fw-bold" onclick="triggerPwaInstall()">
+                    <i class="bi bi-download me-1"></i> Install
+                </button>
+            </div>
+
+            <!-- Stats (Mobile 2 per row using col-6) -->
+            <div class="row g-3 mb-5">
+                <div class="col-6 col-lg-3">
+                    <div class="glass-panel stat-card">
+                        <div class="icon-box icon-blue"><i class="bi bi-journals"></i></div>
+                        <div class="stat-info">
+                            <h6>Total Books</h6>
+                            <h2 id="totalBooks">0</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-3">
+                    <div class="glass-panel stat-card">
+                        <div class="icon-box icon-green"><i class="bi bi-check-circle-fill"></i></div>
+                        <div class="stat-info">
+                            <h6>Available</h6>
+                            <h2 id="availableBooks">0</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-3">
+                    <div class="glass-panel stat-card">
+                        <div class="icon-box icon-orange"><i class="bi bi-bookmark-star-fill"></i></div>
+                        <div class="stat-info">
+                            <h6>Issued</h6>
+                            <h2 id="issuedBooks">0</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-3">
+                    <div class="glass-panel stat-card">
+                        <div class="icon-box icon-pink"><i class="bi bi-exclamation-circle-fill"></i></div>
+                        <div class="stat-info">
+                            <h6>Overdue</h6>
+                            <h2 id="overdueCount">0</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Categories & Recent -->
+            <div class="row g-4 mb-4 align-items-stretch">
+                <div class="col-lg-7">
+                    <div class="glass-panel analytics-card h-100">
+                        <h5 class="fw-bold mb-4"><i class="bi bi-tags-fill text-primary me-2"></i>Books by Category</h5>
+                        <div id="dashCategories" class="d-flex flex-wrap gap-2">Loading...</div>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="glass-panel analytics-card h-100">
+                        <h5 class="fw-bold mb-4"><i class="bi bi-stars text-warning me-2"></i>Recently Added Books</h5>
+                        <ul class="list-group list-group-flush bg-transparent" id="dashRecent">Loading...</ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top Readers & Books -->
+            <div class="row g-4 align-items-stretch">
+                <div class="col-md-6">
+                    <div class="glass-panel analytics-card h-100 d-flex flex-column">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h5 class="fw-bold text-success mb-0"><i class="bi bi-mortarboard-fill me-2"></i>Top Readers
+                            </h5>
+                            <div class="dropdown custom-dropdown">
+                                <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                    id="readerFilterBtn">
+                                    <i class="bi bi-calendar-event-fill text-muted me-1"></i> All Time
+                                </button>
+                                <ul class="dropdown-menu shadow">
+                                    <li><a class="dropdown-item active" href="#"
+                                            onclick="filterReaders('all', 'All Time', event)">All Time</a></li>
+                                    <li><a class="dropdown-item" href="#"
+                                            onclick="filterReaders('month', 'Last 30 Days', event)">Last 30 Days</a>
+                                    </li>
+                                    <li><a class="dropdown-item" href="#"
+                                            onclick="filterReaders('3months', 'Last 90 Days', event)">Last 90 Days</a>
+                                    </li>
+                                    <li><a class="dropdown-item" href="#"
+                                            onclick="filterReaders('year', 'Last 365 Days', event)">Last 365 Days</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="table-responsive flex-grow-1">
+                            <table class="table table-modern table-sm align-middle mb-0">
+                                <tbody id="dashTopReaders"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="glass-panel analytics-card h-100">
+                        <h5 class="fw-bold text-primary mb-4"><i class="bi bi-book-half me-2"></i>Top Books</h5>
+                        <div class="table-responsive">
+                            <table class="table table-modern table-sm align-middle mb-0">
+                                <tbody id="dashTopBooks"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="books" class="page-section">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 mt-2 gap-3">
+                <h4 class="section-title mb-0">Book Management</h4>
+                <div class="d-flex header-actions">
+                    <button class="btn btn-outline-primary rounded-pill fw-bold"
+                        onclick="downloadPDF('booksPrintArea', 'Books_List')"><i class="bi bi-file-pdf-fill"></i> PDF
+                        Download</button>
+                </div>
+            </div>
+
+            <div class="mb-4 d-flex flex-column flex-md-row gap-3">
+                <div class="position-relative flex-grow-1">
+                    <i class="bi bi-search position-absolute top-50 translate-middle-y text-primary fs-5"
+                        style="left: 20px;"></i>
+                    <input type="text" id="searchBookInput" class="search-box ps-5"
+                        placeholder="Search by Book Title, Author or ID..." onkeyup="searchBooks()">
+                </div>
+                <div class="bg-white px-4 py-2 rounded-pill border shadow-sm d-inline-flex align-items-center">
+                    <div class="form-check form-switch mb-0 d-flex align-items-center gap-2">
+                        <input class="form-check-input fs-5 m-0" type="checkbox" role="switch" id="availFilter"
+                            onchange="searchBooks()">
+                        <label class="form-check-label fw-bold text-muted m-0 pt-1" for="availFilter"
+                            style="cursor:pointer; white-space:nowrap;">Available Books മാത്രം</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel analytics-card">
+                <div id="booksPrintArea" class="bg-white p-2 rounded-4">
+                    <h4 class="pdf-title fw-bold text-center mb-4 text-primary" style="display:none;">Library Inventory
+                    </h4>
+                    <div class="table-responsive">
+                        <table class="table table-modern table-hover align-middle table-borderless mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Book ID</th>
+                                    <th>Title & Author</th>
+                                    <th>Category</th>
+                                    <th>Stock / Available</th>
+                                    <th class="hide-in-pdf admin-only-btn d-none">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="booksTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="members" class="page-section">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 mt-2 gap-3">
+                <h4 class="section-title mb-0">Student Management</h4>
+                <div class="d-flex header-actions">
+                    <button class="btn btn-outline-primary rounded-pill fw-bold"
+                        onclick="downloadPDF('membersPrintArea', 'Students_List')"><i class="bi bi-file-pdf-fill"></i>
+                        PDF Download</button>
+                </div>
+            </div>
+            <div class="mb-4 position-relative"><i
+                    class="bi bi-search position-absolute top-50 translate-middle-y text-success fs-5"
+                    style="left: 20px;"></i><input type="text" id="searchMemberInput" class="search-box ps-5"
+                    placeholder="Search by Student Name, ID or Class..." onkeyup="searchMembers()"></div>
+
+            <div class="glass-panel analytics-card">
+                <div id="membersPrintArea" class="bg-white p-2 rounded-4">
+                    <h4 class="pdf-title fw-bold text-center mb-4 text-success" style="display:none;">Students List</h4>
+                    <div class="table-responsive">
+                        <table class="table table-modern table-hover align-middle table-borderless mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Student ID</th>
+                                    <th>Name</th>
+                                    <th>Class/Dept</th>
+                                    <th class="hide-in-pdf admin-only-btn d-none">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="membersTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. ADMIN CONSOLE -->
+        <div id="transactions" class="page-section">
+            <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+                <h4 class="section-title mb-0">Admin Console</h4>
+                <button class="btn btn-sm btn-outline-danger rounded-pill px-3 fw-bold" onclick="lockAdmin()">
+                    <i class="bi bi-lock-fill me-1"></i> Lock Session
+                </button>
+            </div>
+
+            <h5 class="fw-bold mb-3 text-primary"><i class="bi bi-arrow-left-right me-2"></i>Circulation Desk</h5>
+
+            <!-- 3 Columns Grid for Forms -->
+            <div class="row g-4 align-items-stretch mb-4">
+
+                <div class="col-lg-4 col-md-6">
+                    <div class="glass-panel analytics-card h-100 d-flex flex-column">
+                        <h5 class="fw-bold text-primary mb-4"><i class="bi bi-box-arrow-up-right me-2"></i>Issue Book
+                        </h5>
+                        <form id="issueForm" onsubmit="submitIssue(event)" class="mt-auto">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control fw-bold text-primary" id="issueMemberId"
+                                    placeholder="Student ID" required>
+                                <label for="issueMemberId" class="text-muted"><i class="bi bi-person me-1"></i>Student
+                                    ID</label>
+                            </div>
+                            <div class="form-floating mb-4">
+                                <input type="text" class="form-control fw-bold text-primary" id="issueBookId"
+                                    placeholder="Book ID" required>
+                                <label for="issueBookId" class="text-muted"><i class="bi bi-book me-1"></i>Book
+                                    ID</label>
+                            </div>
+                            <button type="submit" class="btn btn-modern btn-gradient-primary w-100" id="issueBtn">Issue
+                                Book</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+                    <div class="glass-panel analytics-card h-100 d-flex flex-column">
+                        <h5 class="fw-bold text-success mb-4"><i class="bi bi-box-arrow-in-down-left me-2"></i>Return
+                            Book</h5>
+                        <form id="returnForm" onsubmit="submitReturn(event)" class="mt-auto">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control fw-bold text-success" id="returnMemberId"
+                                    placeholder="Student ID" required>
+                                <label for="returnMemberId" class="text-muted"><i class="bi bi-person me-1"></i>Student
+                                    ID</label>
+                            </div>
+                            <div class="form-floating mb-4">
+                                <input type="text" class="form-control fw-bold text-success" id="returnBookId"
+                                    placeholder="Book ID" required>
+                                <label for="returnBookId" class="text-muted"><i class="bi bi-book me-1"></i>Book
+                                    ID</label>
+                            </div>
+                            <button type="submit" class="btn btn-modern btn-gradient-success w-100"
+                                id="returnBtn">Return & Calc Fine</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- NEW: Renew Book Card -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="glass-panel analytics-card h-100 d-flex flex-column">
+                        <h5 class="fw-bold text-info mb-4"><i class="bi bi-arrow-repeat me-2"></i>Renew Book</h5>
+                        <form id="renewForm" onsubmit="submitRenew(event)" class="mt-auto">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control fw-bold text-info" id="renewMemberId"
+                                    placeholder="Student ID" required>
+                                <label for="renewMemberId" class="text-muted"><i class="bi bi-person me-1"></i>Student
+                                    ID</label>
+                            </div>
+                            <div class="form-floating mb-4">
+                                <input type="text" class="form-control fw-bold text-info" id="renewBookId"
+                                    placeholder="Book ID" required>
+                                <label for="renewBookId" class="text-muted"><i class="bi bi-book me-1"></i>Book
+                                    ID</label>
+                            </div>
+                            <button type="submit" class="btn btn-modern btn-gradient-info w-100" id="renewBtn">Renew
+                                Book</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admin Quick Actions (Add Book & Add Student) -->
+            <h5 class="fw-bold mt-5 mb-3 text-success"><i class="bi bi-lightning-fill me-2"></i>Quick Actions</h5>
+            <div class="row g-4 mb-4">
+                <div class="col-md-6 col-lg-6">
+                    <div class="glass-panel analytics-card p-4 h-100 d-flex flex-column justify-content-between">
+                        <div class="d-flex align-items-start gap-3 mb-3">
+                            <div class="icon-box icon-blue" style="min-width: 60px; height: 60px; border-radius: 16px;">
+                                <i class="bi bi-book-fill"></i>
+                            </div>
+                            <div>
+                                <h5 class="fw-bold mb-1">Book Management</h5>
+                                <p class="small text-muted mb-0">ആപ്പിലേക്ക് പുതിയ ബുക്ക് ചേർക്കുക</p>
+                            </div>
+                        </div>
+                        <button class="btn btn-modern btn-gradient-primary w-100 fw-bold py-2 mt-auto"
+                            data-bs-toggle="modal" data-bs-target="#addBookModal">
+                            <i class="bi bi-plus-lg me-1"></i> പുതിയ Book Add ചെയ്യുക
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-6">
+                    <div class="glass-panel analytics-card p-4 h-100 d-flex flex-column justify-content-between">
+                        <div class="d-flex align-items-start gap-3 mb-3">
+                            <div class="icon-box icon-green"
+                                style="min-width: 60px; height: 60px; border-radius: 16px;"><i
+                                    class="bi bi-person-plus-fill"></i></div>
+                            <div>
+                                <h5 class="fw-bold mb-1">Student Registration</h5>
+                                <p class="small text-muted mb-0">പുതിയ വിദ്യാർത്ഥിയെ രജിസ്റ്റർ ചെയ്യുക / എഡിറ്റ് ചെയ്യുക
+                                </p>
+                            </div>
+                        </div>
+                        <button class="btn btn-modern btn-gradient-success w-100 fw-bold py-2 mt-auto"
+                            data-bs-toggle="modal" data-bs-target="#addMemberModal">
+                            <i class="bi bi-person-plus-fill me-1"></i> Student Add/Edit
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fine & Settings -->
+            <h5 class="fw-bold mt-5 mb-3 text-danger"><i class="bi bi-cash-stack me-2"></i>Fine Management & Rules</h5>
+            <div class="row g-4 align-items-stretch">
+                <div class="col-lg-4 d-flex flex-column gap-4">
+                    <div class="glass-panel analytics-card bg-light">
+                        <h6 class="fw-bold mb-4 text-muted"><i class="bi bi-gear-fill me-2"></i>Library Settings</h6>
+                        <form id="settingsForm" onsubmit="submitSettings(event)">
+                            <div class="mb-3">
+                                <label class="small fw-bold text-muted">Max Issue Days</label>
+                                <input type="number" class="form-control bg-white" id="setDays" required min="1">
+                            </div>
+                            <div class="mb-3">
+                                <label class="small fw-bold text-muted">Fine Amount (Per Day)</label>
+                                <div class="input-group">
+                                    <span class="input-group-text border-0 bg-white">₹</span>
+                                    <input type="number" class="form-control border-0 bg-white" id="setFine" required
+                                        min="0">
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <label class="small fw-bold text-muted">Admin Password</label>
+                                <input type="password" class="form-control bg-white" id="setPass" required>
+                            </div>
+                            <button type="submit" class="btn btn-outline-secondary rounded-pill w-100 fw-bold"
+                                id="saveSetBtn">Save Rules</button>
+                        </form>
+                    </div>
+
+                    <!-- Category Prefix Manager Card -->
+                    <div class="glass-panel analytics-card bg-light">
+                        <h6 class="fw-bold mb-4 text-muted"><i class="bi bi-tags-fill me-2"></i>Category Prefix Manager
+                        </h6>
+                        <form id="categoryManagerForm" onsubmit="submitCategoryPrefix(event)">
+                            <div class="mb-3">
+                                <label class="small fw-bold text-muted">Category Name</label>
+                                <input type="text" class="form-control bg-white" id="newCatName"
+                                    placeholder="e.g., Fiction" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="small fw-bold text-muted">Book ID Prefix Code</label>
+                                <input type="text" class="form-control bg-white" id="newCatPrefix"
+                                    placeholder="e.g., FIC" required style="text-transform: uppercase;">
+                            </div>
+                            <button type="submit" class="btn btn-outline-primary rounded-pill w-100 fw-bold"
+                                id="saveCatBtn">Save Category Prefix</button>
+                        </form>
+                        <div class="mt-4 pt-3 border-top">
+                            <label class="small fw-bold text-muted d-block mb-2">Existing Category Prefixes</label>
+                            <div class="table-responsive" style="max-height: 150px; overflow-y: auto;">
+                                <table class="table table-sm table-hover align-middle mb-0" style="font-size: 0.85rem;">
+                                    <thead>
+                                        <tr>
+                                            <th>Category</th>
+                                            <th>Prefix</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="adminCategoriesBody">
+                                        <tr>
+                                            <td colspan="2" class="text-center text-muted">Loading...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="glass-panel analytics-card h-100 d-flex flex-column">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="fw-bold text-danger mb-0">Unpaid Fines Record</h6>
+                            <button class="btn btn-sm btn-outline-danger rounded-pill px-3"
+                                onclick="downloadPDF('finePrintArea', 'Unpaid_Fines')">PDF</button>
+                        </div>
+
+                        <div class="d-flex flex-wrap gap-3 mb-3">
+                            <div
+                                class="d-flex align-items-center bg-white px-3 py-2 rounded-pill shadow-sm border border-success">
+                                <i class="bi bi-cash-stack text-success me-2 fs-5"></i>
+                                <div class="me-3 small text-muted fw-bold">Total Paid</div>
+                                <h5 id="totalPaidFine" class="text-success fw-bold mb-0 m-0">₹0</h5>
+                            </div>
+                            <div
+                                class="d-flex align-items-center bg-white px-3 py-2 rounded-pill shadow-sm border border-danger">
+                                <i class="bi bi-exclamation-circle-fill text-danger me-2 fs-5"></i>
+                                <div class="me-3 small text-muted fw-bold">Total Unpaid</div>
+                                <h5 id="totalUnpaidFine" class="text-danger fw-bold mb-0 m-0">₹0</h5>
+                            </div>
+                        </div>
+
+                        <div id="finePrintArea" class="flex-grow-1 bg-white p-2 rounded-4">
+                            <h4 class="pdf-title fw-bold text-center mb-3 text-danger" style="display:none;">Unpaid
+                                Fines</h4>
+                            <div class="table-responsive">
+                                <table class="table table-modern table-borderless align-middle mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Student</th>
+                                            <th>Book</th>
+                                            <th>Amount</th>
+                                            <th class="hide-in-pdf">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="unpaidFinesBody"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. REPORTS -->
+        <div id="reports" class="page-section">
+            <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 mt-2 gap-3">
+                <h4 class="section-title mb-0">Detailed Reports</h4>
+
+                <div class="dropdown custom-dropdown">
+                    <button class="btn dropdown-toggle px-4" type="button" data-bs-toggle="dropdown"
+                        id="globalReportFilterBtn">
+                        <i class="bi bi-funnel-fill me-1"></i> All Time
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end shadow">
+                        <li><a class="dropdown-item active" href="#"
+                                onclick="changeReportFilter('all', 'All Time', event)">All Time</a></li>
+                        <li><a class="dropdown-item" href="#"
+                                onclick="changeReportFilter('month', 'Last 30 Days', event)">Last 30 Days</a></li>
+                        <li><a class="dropdown-item" href="#"
+                                onclick="changeReportFilter('year', 'Last 365 Days', event)">Last 365 Days</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="row g-4 align-items-stretch">
+                <div class="col-md-6">
+                    <div class="glass-panel analytics-card h-100 d-flex flex-column">
+                        <div class="d-flex justify-content-between">
+                            <h5 class="fw-bold text-danger mb-3"><i
+                                    class="bi bi-exclamation-triangle-fill me-2"></i>Overdue List</h5><button
+                                class="btn btn-sm btn-light rounded-circle" onclick="downloadPDF('repOD', 'Overdue')"><i
+                                    class="bi bi-printer"></i></button>
+                        </div>
+                        <div id="repOD" class="table-responsive bg-white p-2 rounded flex-grow-1">
+                            <h4 class="pdf-title d-none text-danger text-center">Overdue</h4>
+                            <table class="table table-modern table-sm mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Student</th>
+                                        <th>Book</th>
+                                        <th>Delay</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="repOverdue"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="glass-panel analytics-card h-100 d-flex flex-column">
+                        <div class="d-flex justify-content-between">
+                            <h5 class="fw-bold text-primary mb-3"><i class="bi bi-bar-chart-fill me-2"></i>Most Issued
+                                Books</h5><button class="btn btn-sm btn-light rounded-circle"
+                                onclick="downloadPDF('repPB', 'Popular_Books')"><i class="bi bi-printer"></i></button>
+                        </div>
+                        <div id="repPB" class="table-responsive bg-white p-2 rounded flex-grow-1">
+                            <h4 class="pdf-title d-none text-primary text-center">Popular Books</h4>
+                            <table class="table table-modern table-sm mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Book Name</th>
+                                        <th>Times Issued</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="repPopBooks"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="glass-panel analytics-card h-100 d-flex flex-column">
+                        <div class="d-flex justify-content-between">
+                            <h5 class="fw-bold text-success mb-3"><i class="bi bi-mortarboard-fill me-2"></i>Top
+                                Students</h5><button class="btn btn-sm btn-light rounded-circle"
+                                onclick="downloadPDF('repTS', 'Top_Students')"><i class="bi bi-printer"></i></button>
+                        </div>
+                        <div id="repTS" class="table-responsive bg-white p-2 rounded flex-grow-1">
+                            <h4 class="pdf-title d-none text-success text-center">Top Students</h4>
+                            <table class="table table-modern table-sm mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Student</th>
+                                        <th>Books</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="repTopStudents"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="glass-panel analytics-card h-100 d-flex flex-column">
+                        <div class="d-flex justify-content-between">
+                            <h5 class="fw-bold text-info mb-3"><i class="bi bi-pie-chart-fill me-2"></i>Class-wise
+                                Report</h5><button class="btn btn-sm btn-light rounded-circle"
+                                onclick="downloadPDF('repCW', 'Class_Report')"><i class="bi bi-printer"></i></button>
+                        </div>
+                        <div id="repCW" class="table-responsive bg-white p-2 rounded flex-grow-1">
+                            <h4 class="pdf-title d-none text-info text-center">Class Report</h4>
+                            <table class="table table-modern table-sm mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Class</th>
+                                        <th>Books Read</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="repClass"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODALS -->
+    <div class="modal fade" id="addBookModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold">പുതിയ Book Add ചെയ്യുക</h5><button type="button" class="btn-close"
+                        data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addBookForm" onsubmit="submitNewBook(event)">
+                        <div class="row g-3">
+                            <div class="col-md-6"><input type="text" class="form-control" id="bkId"
+                                    placeholder="Book ID" required></div>
+                            <div class="col-md-6"><input type="text" class="form-control" id="bkRack"
+                                    placeholder="Rack No"></div>
+                            <div class="col-12"><input type="text" class="form-control" id="bkTitle"
+                                    placeholder="Book Title" required></div>
+                            <div class="col-12"><input type="text" class="form-control" id="bkAuthor"
+                                    placeholder="Author" required></div>
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <select class="form-select" id="bkCategory" required
+                                        onchange="suggestNextBookId(this.value)"
+                                        style="border-top-right-radius: 0; border-bottom-right-radius: 0;">
+                                        <option value="" disabled selected>Category Select</option>
+                                    </select>
+                                    <button class="btn btn-outline-primary" type="button"
+                                        onclick="promptAddNewCategory()"
+                                        style="border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 12px; border-bottom-right-radius: 12px;"
+                                        title="Add New Category">
+                                        <i class="bi bi-plus-lg"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-6"><input type="number" class="form-control" id="bkTotal"
+                                    placeholder="Total Copies (Stock)" required min="1"></div>
+                            <div class="col-12"><select class="form-select" id="bkType">
+                                    <option value="Issuable">Issuable</option>
+                                    <option value="Reference">Reference Only</option>
+                                </select></div>
+                        </div>
+                        <div class="mt-4"><button type="submit" class="btn btn-modern btn-gradient-primary w-100"
+                                id="saveBtn">Save Book</button></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Book Modal -->
+    <div class="modal fade" id="editBookModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold text-warning">പുസ്തകത്തിന്റെ വിവരങ്ങൾ തിരുത്തുക</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editBookForm" onsubmit="submitEditBook(event)">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="small fw-bold text-muted mb-1">Book ID (മാറ്റാൻ സാധിക്കില്ല)</label>
+                                <input type="text" class="form-control bg-light fw-bold" id="editBkId" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small fw-bold text-muted mb-1">Rack No</label>
+                                <input type="text" class="form-control" id="editBkRack" placeholder="Rack No">
+                            </div>
+                            <div class="col-12">
+                                <label class="small fw-bold text-muted mb-1">Book Title</label>
+                                <input type="text" class="form-control" id="editBkTitle" placeholder="Book Title"
+                                    required>
+                            </div>
+                            <div class="col-12">
+                                <label class="small fw-bold text-muted mb-1">Author</label>
+                                <input type="text" class="form-control" id="editBkAuthor" placeholder="Author" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small fw-bold text-muted mb-1">Category</label>
+                                <select class="form-select" id="editBkCategory" required>
+                                    <!-- Dynamic options -->
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small fw-bold text-muted mb-1">Total Copies (Stock)</label>
+                                <input type="number" class="form-control" id="editBkTotal" placeholder="Total Copies"
+                                    required min="1">
+                            </div>
+                            <div class="col-12">
+                                <label class="small fw-bold text-muted mb-1">Type</label>
+                                <select class="form-select" id="editBkType">
+                                    <option value="Issuable">Issuable</option>
+                                    <option value="Reference">Reference Only</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-modern btn-gradient-warning w-100 fw-bold"
+                                id="editSaveBtn">Update Book</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="addMemberModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold text-success">Student Add/Edit</h5><button type="button"
+                        class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addMemberForm" onsubmit="submitNewMember(event)">
+                        <div class="row g-3">
+                            <div class="col-md-6"><input type="text" class="form-control" id="memId"
+                                    placeholder="Student ID" required></div>
+                            <div class="col-md-6"><input type="text" class="form-control" id="memName"
+                                    placeholder="Full Name" required></div>
+                            <div class="col-12"><input type="text" class="form-control" id="memClass"
+                                    placeholder="Class / Dept"></div>
+                            <div class="col-12 d-none"><select class="form-select" id="memRole">
+                                    <option value="Student" selected>Student</option>
+                                </select></div>
+                        </div>
+                        <div class="mt-4"><button type="submit" class="btn btn-modern btn-gradient-success w-100"
+                                id="saveMemBtn">Save Student</button></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Member Modal -->
+    <div class="modal fade" id="editMemberModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold text-warning">Student വിവരങ്ങൾ തിരുത്തുക</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editMemberForm" onsubmit="submitEditMember(event)">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="small fw-bold text-muted mb-1">Student ID (മാറ്റാൻ സാധിക്കില്ല)</label>
+                                <input type="text" class="form-control bg-light fw-bold" id="editMemId" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small fw-bold text-muted mb-1">Class / Dept</label>
+                                <input type="text" class="form-control" id="editMemClass" placeholder="Class / Dept"
+                                    required>
+                            </div>
+                            <div class="col-12">
+                                <label class="small fw-bold text-muted mb-1">Full Name</label>
+                                <input type="text" class="form-control" id="editMemName" placeholder="Full Name"
+                                    required>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-modern btn-gradient-warning w-100 fw-bold"
+                                id="editSaveMemBtn">Update Student</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="profileModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold text-primary"><i class="bi bi-person-lines-fill me-2"></i>Student
+                        Profile</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-0">
+                    <div class="p-3 bg-light border-bottom">
+                        <h6 class="fw-bold text-danger mb-2">Currently Issued Books</h6>
+                        <div id="profCurrent">Loading...</div>
+                    </div>
+                    <div class="p-3">
+                        <h6 class="fw-bold text-muted mb-2">Student History</h6>
+                        <div id="profHistory">Loading...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="bookHistoryModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold text-info"><i class="bi bi-clock-history me-2"></i>Book History -
+                        <span id="histBookName" class="text-dark"></span>
+                    </h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-0">
+                    <div class="table-responsive p-3">
+                        <table class="table table-modern align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Issue Date</th>
+                                    <th>Return Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bookHistoryBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // --- GitHub Pages - Google Apps Script Integration Polyfill ---
+        // Deploy your Google Apps Script project as a Web App (Access: "Anyone", Execute as: "Me") 
+        // and paste the Web App URL (ending in /exec) here:
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzOQWy-MX1XzzjgYUF97u1yIocDB8q5da1jaqKKRopec4Rb_vEz-yuJe6r93GaS7tTy/exec";
+
+        window.google = window.google || {};
+        window.google.script = window.google.script || {};
+        window.google.script.run = (function () {
+            function Runner(onSuccess, onFailure) {
+                return new Proxy({}, {
+                    get(target, functionName) {
+                        if (functionName === 'withSuccessHandler') {
+                            return function (callback) {
+                                return Runner(callback, onFailure);
+                            };
+                        }
+                        if (functionName === 'withFailureHandler') {
+                            return function (callback) {
+                                return Runner(onSuccess, callback);
+                            };
+                        }
+                        return function (...args) {
+                            if (WEB_APP_URL === "YOUR_WEB_APP_URL_HERE" || !WEB_APP_URL) {
+                                console.error("Error: WEB_APP_URL is not set in index.html. Please paste your Google Apps Script Web App URL.");
+                                if (onFailure) {
+                                    onFailure("WEB_APP_URL is not configured.");
+                                } else {
+                                    alert("Error: WEB_APP_URL is not set in index.html. Please configure it to connect to the backend.");
+                                }
+                                return;
+                            }
+                            fetch(WEB_APP_URL, {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "text/plain;charset=utf-8"
+                                },
+                                body: JSON.stringify({
+                                    functionName: functionName,
+                                    args: args
+                                })
+                            })
+                                .then(res => {
+                                    if (!res.ok) throw new Error("HTTP error " + res.status);
+                                    return res.json();
+                                })
+                                .then(response => {
+                                    if (response.success) {
+                                        if (onSuccess) onSuccess(response.result);
+                                    } else {
+                                        if (onFailure) onFailure(response.error);
+                                        else console.error("Apps Script server error: ", response.error);
+                                    }
+                                })
+                                .catch(err => {
+                                    if (onFailure) onFailure(err);
+                                    else console.error("Network or connection error: ", err);
+                                });
+                        };
+                    }
+                });
+            }
+            return Runner();
+        })();
+
+        let cachedAdminPassword = "admin123";
+        let activeCategories = [];
+        let allBooksCache = [];
+        let cachedCategoriesWithPrefixes = [];
+
+        function initApp() {
+            // Load dashboard data immediately in the background
+            loadDashboardData();
+            // Cache books list on startup for ID auto-suggestions
+            google.script.run.withSuccessHandler(books => {
+                allBooksCache = books;
+            }).getAllBooks();
+            // Fetch settings on startup to cache the Admin password
+            google.script.run.withSuccessHandler(s => {
+                if (s && s.password) {
+                    cachedAdminPassword = s.password;
+                }
+            }).getSystemSettings();
+            // Load categories and prefix configurations
+            loadCategoryPrefixes();
+        }
+
+        function closeNavbar() {
+            let navbarCollapse = document.getElementById('navbarNav');
+            if (navbarCollapse && navbarCollapse.classList.contains('show')) {
+                let bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse);
+                if (!bsCollapse) {
+                    bsCollapse = new bootstrap.Collapse(navbarCollapse);
+                }
+                bsCollapse.hide();
+            }
+        }
+
+        function safeHideModal(modalId) {
+            let modalEl = document.getElementById(modalId);
+            if (!modalEl) return;
+            let modalInstance = bootstrap.Modal.getInstance(modalEl);
+            if (!modalInstance) {
+                modalInstance = new bootstrap.Modal(modalEl);
+            }
+            modalInstance.hide();
+            
+            // Fail-safe to ensure backdrop is removed and scroll is restored
+            setTimeout(() => {
+                document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+                document.body.classList.remove('modal-open');
+                document.body.style.overflow = '';
+                document.body.style.paddingRight = '';
+            }, 350);
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            initApp();
+
+            // Auto-dismiss splash screen after 3 seconds
+            setTimeout(() => {
+                const splash = document.getElementById('splashScreen');
+                if (splash) {
+                    splash.classList.add('fade-out-active');
+                    // Remove from DOM after fade-out transition completes (600ms)
+                    setTimeout(() => {
+                        splash.remove();
+                    }, 600);
+                }
+            }, 3000);
+
+            // Close navbar when clicking outside
+            document.addEventListener('click', (event) => {
+                let navbarCollapse = document.getElementById('navbarNav');
+                let navbarToggler = document.querySelector('.navbar-toggler');
+                if (navbarCollapse && navbarCollapse.classList.contains('show')) {
+                    if (!navbarCollapse.contains(event.target) && !navbarToggler.contains(event.target)) {
+                        closeNavbar();
+                    }
+                }
+            });
+        });
+
+        let isAdminAuthenticated = false;
+
+        function showPage(pageId) {
+            closeNavbar();
+            if (pageId === 'transactions' && !isAdminAuthenticated) {
+                Swal.fire({
+                    title: 'Admin Verification',
+                    text: 'തുടരുന്നതിന് അഡ്മിൻ പാസ്‌വേഡ് നൽകുക:',
+                    input: 'password',
+                    inputPlaceholder: 'Enter Admin Password',
+                    inputAttributes: {
+                        autocapitalize: 'off',
+                        autocorrect: 'off'
+                    },
+                    showCancelButton: true,
+                    confirmButtonText: 'Verify',
+                    confirmButtonColor: '#01BEFE',
+                    cancelButtonColor: '#6c757d',
+                    preConfirm: (password) => {
+                        if (password === cachedAdminPassword) {
+                            return true;
+                        } else {
+                            Swal.showValidationMessage('തെറ്റായ പാസ്‌വേഡ്! വീണ്ടും ശ്രമിക്കുക.');
+                            return false;
+                        }
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed && result.value) {
+                        isAdminAuthenticated = true;
+                        actualShowPage(pageId);
+                    } else {
+                        // Re-activate current active tab link in case they cancelled
+                        let currentActiveSection = Array.from(document.querySelectorAll('.page-section')).find(sec => sec.style.display === 'block' || window.getComputedStyle(sec).display === 'block');
+                        if (currentActiveSection) {
+                            let prevPageId = currentActiveSection.id;
+                            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+                            document.getElementById('nav-' + prevPageId).classList.add('active');
+                        }
+                    }
+                });
+                return;
+            }
+            actualShowPage(pageId);
+        }
+
+        function actualShowPage(pageId) {
+            document.querySelectorAll('.page-section').forEach(page => page.style.display = 'none');
+            document.getElementById(pageId).style.display = 'block';
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+            document.getElementById('nav-' + pageId).classList.add('active');
+
+            if (pageId === 'books') loadBooksTable();
+            if (pageId === 'members') loadMembersTable();
+            if (pageId === 'reports') loadReportsData();
+            if (pageId === 'transactions') { loadSettings(); loadFineDetails(); }
+            toggleAdminUIElements();
+        }
+
+        function lockAdmin() {
+            isAdminAuthenticated = false;
+            showPage('dashboard');
+            showSuccess("Admin session locked successfully!");
+            toggleAdminUIElements();
+        }
+
+        // Clean Solid Alerts
+        function showSuccess(msg) { Swal.fire({ title: 'Success!', text: msg, icon: 'success', confirmButtonColor: '#4f46e5', timer: 2500, showConfirmButton: false }); }
+        function showError(msg) { Swal.fire({ title: 'Attention!', text: msg, icon: 'warning', confirmButtonColor: '#ef4444' }); }
+
+        // Dashboard
+        function filterReaders(value = 'all', text = 'All Time', event = null) {
+            if (event) {
+                event.preventDefault();
+                document.getElementById('readerFilterBtn').innerHTML = `<i class="bi bi-calendar-event-fill text-muted me-1"></i> ${text}`;
+                document.querySelectorAll('#readerFilterBtn + .dropdown-menu .dropdown-item').forEach(el => el.classList.remove('active'));
+                event.target.classList.add('active');
+            }
+            document.getElementById('dashTopReaders').innerHTML = '<tr><td colspan="3" class="text-center text-primary py-3"><div class="spinner-border spinner-border-sm me-2"></div>Filtering...</td></tr>';
+            google.script.run.withSuccessHandler(data => updateDashboardUI(data)).getDashboardData(value);
+        }
+
+        function loadDashboardData() {
+            ['totalBooks', 'issuedBooks', 'availableBooks', 'overdueCount'].forEach(id => document.getElementById(id).innerText = "...");
+            google.script.run.withSuccessHandler(data => updateDashboardUI(data)).getDashboardData('all');
+        }
+
+        function updateDashboardUI(data) {
+            if (data.error) { showError("Data Error: " + data.error); return; }
+            document.getElementById('totalBooks').innerText = data.totalBooks; document.getElementById('issuedBooks').innerText = data.issuedBooks;
+            document.getElementById('availableBooks').innerText = data.availableBooks; document.getElementById('overdueCount').innerText = data.overdueCount;
+
+            let catHtml = ''; for (const [key, value] of Object.entries(data.categories)) { catHtml += `<span class="badge-custom bg-white text-dark me-2 mb-2 shadow-sm border"><i class="bi bi-tag-fill text-primary"></i> ${key}: <span class="text-primary fw-bold">${value}</span></span>`; } document.getElementById('dashCategories').innerHTML = catHtml;
+            let recHtml = ''; data.recentlyAdded.forEach(b => recHtml += `<li class="list-group-item bg-transparent px-0 border-light"><i class="bi bi-book text-muted me-2"></i><b>${b.title}</b> <span class="small text-muted">(${b.category})</span></li>`); document.getElementById('dashRecent').innerHTML = recHtml || '<li class="list-group-item bg-transparent">No recent books</li>';
+            let trHtml = ''; data.topReaders.forEach((r, i) => trHtml += `<tr><td><i class="bi bi-${i + 1}-circle-fill text-success fs-5"></i></td><td class="fw-bold">${r.name}</td><td><span class="badge bg-success rounded-pill">${r.count}</span></td></tr>`); document.getElementById('dashTopReaders').innerHTML = trHtml || '<tr><td colspan="3">No data</td></tr>';
+            let tbHtml = ''; data.topBooksArr.forEach((b, i) => tbHtml += `<tr><td><i class="bi bi-${i + 1}-circle-fill text-primary fs-5"></i></td><td class="fw-bold">${b.title}</td><td><span class="badge bg-primary rounded-pill">${b.count}</span></td></tr>`); document.getElementById('dashTopBooks').innerHTML = tbHtml || '<tr><td colspan="3">No data</td></tr>';
+
+            if (data.categories) {
+                populateCategoryDropdown(Object.keys(data.categories));
+            }
+        }
+
+        // Reports Filter
+        let currentReportFilter = 'all';
+        function changeReportFilter(value, text, event) {
+            if (event) event.preventDefault();
+            currentReportFilter = value;
+            document.getElementById('globalReportFilterBtn').innerHTML = `<i class="bi bi-funnel-fill me-1"></i> ${text}`;
+            document.querySelectorAll('#globalReportFilterBtn + .dropdown-menu .dropdown-item').forEach(el => el.classList.remove('active'));
+            event.target.classList.add('active');
+            loadReportsData();
+        }
+
+        function loadReportsData() {
+            let filter = currentReportFilter;
+            google.script.run.withSuccessHandler(data => {
+                let odHtml = ''; data.overdueList.forEach(o => odHtml += `<tr><td>${o.student}</td><td>${o.book}</td><td class="text-danger fw-bold">${o.days} Days</td></tr>`); document.getElementById('repOverdue').innerHTML = odHtml || '<tr><td colspan="3" class="text-center text-success"><i class="bi bi-check-circle"></i> No overdue books</td></tr>';
+                let pbHtml = ''; data.popBooks.forEach(p => pbHtml += `<tr><td>${p.book}</td><td class="fw-bold text-primary">${p.count}</td></tr>`); document.getElementById('repPopBooks').innerHTML = pbHtml || '<tr><td colspan="2" class="text-center">No data</td></tr>';
+                let tsHtml = ''; data.topStudents.forEach(t => tsHtml += `<tr><td>${t.student}</td><td class="fw-bold text-success">${t.count}</td></tr>`); document.getElementById('repTopStudents').innerHTML = tsHtml || '<tr><td colspan="2" class="text-center">No data</td></tr>';
+                let clHtml = ''; data.classWise.forEach(c => clHtml += `<tr><td>${c.className}</td><td class="fw-bold text-info">${c.count}</td></tr>`); document.getElementById('repClass').innerHTML = clHtml || '<tr><td colspan="2" class="text-center">No data</td></tr>';
+            }).getReportsData(filter);
+        }
+
+        // Books 
+        function loadBooksTable() {
+            document.getElementById('booksTableBody').innerHTML = '<tr><td colspan="5" class="text-center py-4">Loading...</td></tr>';
+            google.script.run.withSuccessHandler(books => {
+                allBooksCache = books;
+                let tbody = document.getElementById('booksTableBody');
+                if (books.length === 0) { tbody.innerHTML = '<tr><td colspan="5" class="text-center py-4">No books.</td></tr>'; return; }
+                let html = '';
+                let cats = [];
+                books.forEach(b => {
+                    if (b.category) cats.push(b.category);
+                    html += `<tr data-avail="${b.available}">
+            <td class="fw-bold text-primary">${b.id}</td>
+            <td><div class="fw-bold">${b.title}</div><div class="small text-muted">${b.author}</div></td>
+            <td><span class="badge-custom bg-light text-dark">${b.category}</span></td>
+            <td><div class="fw-bold ${b.available > 0 ? 'text-success' : 'text-danger'} fs-5">${b.available} <span class="fw-normal text-muted fs-6">/ ${b.total}</span></div></td>
+            <td class="hide-in-pdf admin-only-btn ${isAdminAuthenticated ? '' : 'd-none'}">
+                <button class="btn btn-sm btn-outline-info rounded-pill fw-bold me-1" onclick="viewBookHistory('${b.id}', '${b.title}')"><i class="bi bi-clock-history"></i> History</button>
+                <button class="btn btn-sm btn-outline-warning rounded-pill fw-bold" onclick="openEditBookModal('${b.id}')"><i class="bi bi-pencil-square"></i> Edit</button>
+            </td>
+          </tr>`;
+                });
+                tbody.innerHTML = html; searchBooks();
+                if (cats.length > 0) populateCategoryDropdown(cats);
+                toggleAdminUIElements();
+            }).getAllBooks();
+        }
+        function populateCategoryDropdown(categoriesArray) {
+            let uniqueCats = [...new Set(categoriesArray)].map(c => c ? c.toString().trim() : "").filter(c => c !== "").sort();
+            activeCategories = uniqueCats;
+
+            let selectEl = document.getElementById('bkCategory');
+            if (!selectEl) return;
+
+            let currentVal = selectEl.value;
+            selectEl.innerHTML = '<option value="" disabled selected>Category Select</option>';
+
+            uniqueCats.forEach(cat => {
+                let opt = document.createElement('option');
+                opt.value = cat;
+                opt.textContent = cat;
+                selectEl.appendChild(opt);
+            });
+
+            if (currentVal && uniqueCats.includes(currentVal)) {
+                selectEl.value = currentVal;
+            }
+        }
+
+        function promptAddNewCategory() {
+            Swal.fire({
+                title: 'പുതിയ Category ചേർക്കുക',
+                input: 'text',
+                inputPlaceholder: 'Enter Category Name',
+                showCancelButton: true,
+                confirmButtonText: 'Add',
+                confirmButtonColor: '#01BEFE',
+                cancelButtonColor: '#6c757d',
+                preConfirm: (value) => {
+                    if (!value || value.trim() === "") {
+                        Swal.showValidationMessage('Category name cannot be empty!');
+                        return false;
+                    }
+                    return value.trim();
+                }
+            }).then((result) => {
+                if (result.isConfirmed && result.value) {
+                    let newCat = result.value;
+                    if (!activeCategories.includes(newCat)) {
+                        activeCategories.push(newCat);
+                        populateCategoryDropdown(activeCategories);
+                    }
+                    document.getElementById('bkCategory').value = newCat;
+                    suggestNextBookId(newCat);
+                }
+            });
+        }
+
+        function suggestNextBookId(category) {
+            if (!category) return;
+
+            let prefixRule = cachedCategoriesWithPrefixes.find(c => c.category.toLowerCase() === category.toLowerCase());
+            let targetPrefix = prefixRule ? prefixRule.prefix.toUpperCase().trim() : "";
+
+            let catBooks = [];
+            if (Array.isArray(allBooksCache)) {
+                catBooks = allBooksCache.filter(b => b.category && b.category.toLowerCase() === category.toLowerCase());
+            }
+
+            let nextId = "";
+            if (catBooks.length > 0) {
+                let prefixCounts = {};
+                let maxNumForPrefix = {};
+                let numLengthForPrefix = {};
+
+                catBooks.forEach(b => {
+                    let id = b.id ? b.id.toString().trim() : "";
+                    let match = id.match(/^([a-zA-Z\-_]*?)(\d+)$/);
+                    if (match) {
+                        let prefix = match[1];
+                        let numStr = match[2];
+                        let num = parseInt(numStr, 10);
+
+                        prefixCounts[prefix] = (prefixCounts[prefix] || 0) + 1;
+                        if (maxNumForPrefix[prefix] === undefined || num > maxNumForPrefix[prefix]) {
+                            maxNumForPrefix[prefix] = num;
+                            numLengthForPrefix[prefix] = numStr.length;
+                        }
+                    }
+                });
+
+                let bestPrefix = targetPrefix;
+                if (!bestPrefix) {
+                    let maxCount = -1;
+                    for (let prefix in prefixCounts) {
+                        if (prefixCounts[prefix] > maxCount) {
+                            maxCount = prefixCounts[prefix];
+                            bestPrefix = prefix;
+                        }
+                    }
+                }
+
+                if (bestPrefix !== undefined && maxNumForPrefix[bestPrefix] !== undefined) {
+                    let nextNum = maxNumForPrefix[bestPrefix] + 1;
+                    let padLength = numLengthForPrefix[bestPrefix] || 3;
+                    let nextNumStr = nextNum.toString().padStart(padLength, '0');
+                    nextId = bestPrefix + nextNumStr;
+                } else if (bestPrefix) {
+                    nextId = bestPrefix + "001";
+                }
+            }
+
+            if (!nextId) {
+                let prefix = targetPrefix;
+                if (!prefix) {
+                    let cleanCat = category.replace(/[^a-zA-Z]/g, '');
+                    prefix = cleanCat.substring(0, 3).toUpperCase();
+                    if (prefix.length < 2) prefix = "BK";
+                }
+                nextId = prefix + "001";
+            }
+
+            let bkIdInput = document.getElementById('bkId');
+            if (bkIdInput) {
+                bkIdInput.value = nextId;
+            }
+        }
+
+        function toggleAdminUIElements() {
+            document.querySelectorAll('.admin-only-btn').forEach(btn => {
+                if (isAdminAuthenticated) {
+                    btn.classList.remove('d-none');
+                } else {
+                    btn.classList.add('d-none');
+                }
+            });
+        }
+
+        function loadCategoryPrefixes() {
+            google.script.run.withSuccessHandler(list => {
+                cachedCategoriesWithPrefixes = list || [];
+
+                let cats = cachedCategoriesWithPrefixes.map(c => c.category);
+                populateCategoryDropdown(cats);
+
+                let tbody = document.getElementById('adminCategoriesBody');
+                if (!tbody) return;
+
+                if (cachedCategoriesWithPrefixes.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="2" class="text-center text-muted py-2">No categories yet.</td></tr>';
+                    return;
+                }
+
+                let html = '';
+                cachedCategoriesWithPrefixes.forEach(c => {
+                    html += `<tr>
+                        <td class="fw-bold">${c.category}</td>
+                        <td><span class="badge bg-primary px-2 py-1">${c.prefix}</span></td>
+                    </tr>`;
+                });
+                tbody.innerHTML = html;
+            }).getCategoriesAndPrefixes();
+        }
+
+        function submitCategoryPrefix(e) {
+            e.preventDefault();
+            let btn = document.getElementById('saveCatBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Saving...';
+
+            let category = document.getElementById('newCatName').value;
+            let prefix = document.getElementById('newCatPrefix').value;
+
+            google.script.run
+                .withSuccessHandler(res => {
+                    btn.disabled = false;
+                    btn.innerHTML = 'Save Category Prefix';
+                    document.getElementById('categoryManagerForm').reset();
+                    showSuccess(res);
+                    loadCategoryPrefixes();
+                    loadDashboardData();
+                })
+                .withFailureHandler(err => {
+                    btn.disabled = false;
+                    btn.innerHTML = 'Save Category Prefix';
+                    showError("Connection failure: " + err);
+                })
+                .addCategoryAndPrefix(category, prefix);
+        }
+
+        function populateEditCategoryDropdown(currentCategory) {
+            let selectEl = document.getElementById('editBkCategory');
+            if (!selectEl) return;
+
+            let mergedCats = [...new Set([...activeCategories, ...cachedCategoriesWithPrefixes.map(c => c.category)])];
+            let uniqueCats = mergedCats.map(c => c ? c.toString().trim() : "").filter(c => c !== "").sort();
+
+            selectEl.innerHTML = '';
+            uniqueCats.forEach(cat => {
+                let opt = document.createElement('option');
+                opt.value = cat;
+                opt.textContent = cat;
+                selectEl.appendChild(opt);
+            });
+
+            if (currentCategory) {
+                selectEl.value = currentCategory;
+            }
+        }
+
+        function openEditBookModal(bookId) {
+            if (!allBooksCache || allBooksCache.length === 0) return;
+            let book = allBooksCache.find(b => b.id.toString().trim() === bookId.toString().trim());
+            if (!book) return;
+
+            document.getElementById('editBkId').value = book.id;
+            document.getElementById('editBkRack').value = book.rack || "";
+            document.getElementById('editBkTitle').value = book.title || "";
+            document.getElementById('editBkAuthor').value = book.author || "";
+
+            populateEditCategoryDropdown(book.category);
+
+            document.getElementById('editBkTotal').value = book.total || 1;
+            document.getElementById('editBkType').value = book.type || "Issuable";
+
+            new bootstrap.Modal(document.getElementById('editBookModal')).show();
+        }
+
+        function submitEditBook(e) {
+            e.preventDefault();
+            let btn = document.getElementById('editSaveBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Updating...';
+
+            let bId = document.getElementById('editBkId').value;
+            let bData = {
+                title: document.getElementById('editBkTitle').value,
+                author: document.getElementById('editBkAuthor').value,
+                category: document.getElementById('editBkCategory').value,
+                rackNo: document.getElementById('editBkRack').value,
+                totalCopies: document.getElementById('editBkTotal').value,
+                type: document.getElementById('editBkType').value
+            };
+
+            google.script.run
+                .withSuccessHandler(res => {
+                    btn.disabled = false;
+                    btn.innerHTML = 'Update Book';
+                    safeHideModal('editBookModal');
+                    loadBooksTable();
+                    loadDashboardData();
+                    showSuccess(res);
+                })
+                .withFailureHandler(err => {
+                    btn.disabled = false;
+                    btn.innerHTML = 'Update Book';
+                    showError("Connection failure: " + err);
+                })
+                .updateBookDetails(bId, bData);
+        }
+
+        function openEditMemberModal(mId, mName, mClass) {
+            document.getElementById('editMemId').value = mId;
+            document.getElementById('editMemName').value = mName;
+            document.getElementById('editMemClass').value = mClass;
+            new bootstrap.Modal(document.getElementById('editMemberModal')).show();
+        }
+
+        function submitEditMember(e) {
+            e.preventDefault();
+            let btn = document.getElementById('editSaveMemBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Updating...';
+
+            let mId = document.getElementById('editMemId').value;
+            let mData = {
+                name: document.getElementById('editMemName').value,
+                className: document.getElementById('editMemClass').value
+            };
+
+            google.script.run
+                .withSuccessHandler(res => {
+                    btn.disabled = false;
+                    btn.innerHTML = 'Update Student';
+                    safeHideModal('editMemberModal');
+                    loadMembersTable();
+                    loadDashboardData();
+                    showSuccess(res);
+                })
+                .withFailureHandler(err => {
+                    btn.disabled = false;
+                    btn.innerHTML = 'Update Student';
+                    showError("Connection failure: " + err);
+                })
+                .updateMemberDetails(mId, mData);
+        }
+
+        function submitNewBook(e) {
+            e.preventDefault();
+            let btn = document.getElementById('saveBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Saving...';
+            let bData = { bookId: document.getElementById('bkId').value, rackNo: document.getElementById('bkRack').value, title: document.getElementById('bkTitle').value, author: document.getElementById('bkAuthor').value, category: document.getElementById('bkCategory').value, totalCopies: document.getElementById('bkTotal').value, type: document.getElementById('bkType').value };
+            google.script.run
+                .withSuccessHandler(res => {
+                    btn.disabled = false;
+                    btn.innerHTML = 'Save Book';
+                    safeHideModal('addBookModal');
+                    document.getElementById('addBookForm').reset();
+                    loadBooksTable();
+                    loadDashboardData();
+                    showSuccess(res);
+                })
+                .withFailureHandler(err => {
+                    btn.disabled = false;
+                    btn.innerHTML = 'Save Book';
+                    showError("Connection failure: " + err);
+                })
+                .addNewBook(bData);
+        }
+        function searchBooks() {
+            let input = document.getElementById('searchBookInput').value.toLowerCase(); let availOnly = document.getElementById('availFilter').checked;
+            document.querySelectorAll('#booksTableBody tr').forEach(row => {
+                let isAvail = Number(row.getAttribute('data-avail')) > 0; let match = row.innerText.toLowerCase().includes(input);
+                row.style.display = (match && (!availOnly || isAvail)) ? '' : 'none';
+            });
+        }
+
+        function viewBookHistory(bId, bName) {
+            document.getElementById('histBookName').innerText = bName;
+            document.getElementById('bookHistoryBody').innerHTML = '<tr><td colspan="4" class="text-center py-4">Loading history...</td></tr>';
+            new bootstrap.Modal(document.getElementById('bookHistoryModal')).show();
+            google.script.run.withSuccessHandler(hist => {
+                let html = '';
+                if (hist.length === 0) html = '<tr><td colspan="4" class="text-center text-muted py-4">Nobody has taken this book yet.</td></tr>';
+                else hist.forEach(h => {
+                    let statBadge = h.status === 'Returned' ? '<span class="badge bg-success">Returned</span>' : '<span class="badge bg-warning text-dark">Currently Issued</span>';
+                    html += `<tr><td class="fw-bold">${h.student}</td><td class="text-muted">${h.issueDate}</td><td class="text-muted">${h.returnDate}</td><td>${statBadge}</td></tr>`;
+                });
+                document.getElementById('bookHistoryBody').innerHTML = html;
+            }).getBookHistory(bId);
+        }
+
+        // Members 
+        function loadMembersTable() {
+            document.getElementById('membersTableBody').innerHTML = '<tr><td colspan="4" class="text-center py-4">Loading...</td></tr>';
+            google.script.run.withSuccessHandler(members => {
+                let tbody = document.getElementById('membersTableBody');
+                if (members.length === 0) { tbody.innerHTML = '<tr><td colspan="4" class="text-center py-4">No students found.</td></tr>'; return; }
+                let html = '';
+                members.forEach(m => {
+                    let escapedName = (m.name || "").replace(/'/g, "\\'");
+                    let escapedClass = (m.className || "").replace(/'/g, "\\'");
+                    html += `<tr>
+                        <td class="fw-bold text-muted">${m.id}</td>
+                        <td class="fw-bold">${m.name}</td>
+                        <td>${m.className}</td>
+                        <td class="hide-in-pdf admin-only-btn ${isAdminAuthenticated ? '' : 'd-none'}">
+                            <button class="btn btn-sm btn-outline-primary rounded-pill fw-bold me-1" onclick="viewProfile('${m.id}')"><i class="bi bi-clock-history"></i> Profile / History</button>
+                            <button class="btn btn-sm btn-outline-warning rounded-pill fw-bold" onclick="openEditMemberModal('${m.id}', '${escapedName}', '${escapedClass}')"><i class="bi bi-pencil-square"></i> Edit</button>
+                        </td>
+                    </tr>`;
+                });
+                tbody.innerHTML = html;
+                toggleAdminUIElements();
+            }).getAllMembers();
+        }
+        function submitNewMember(e) {
+            e.preventDefault();
+            let btn = document.getElementById('saveMemBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Saving...';
+            let mData = { memberId: document.getElementById('memId').value, name: document.getElementById('memName').value, role: "Student", className: document.getElementById('memClass').value };
+            google.script.run
+                .withSuccessHandler(res => {
+                    btn.disabled = false;
+                    btn.innerHTML = 'Save Student';
+                    safeHideModal('addMemberModal');
+                    document.getElementById('addMemberForm').reset();
+                    loadMembersTable();
+                    loadDashboardData();
+                    showSuccess(res);
+                })
+                .withFailureHandler(err => {
+                    btn.disabled = false;
+                    btn.innerHTML = 'Save Student';
+                    showError("Connection failure: " + err);
+                })
+                .addNewMember(mData);
+        }
+        function searchMembers() { let input = document.getElementById('searchMemberInput').value.toLowerCase(); document.querySelectorAll('#membersTableBody tr').forEach(row => { row.style.display = row.innerText.toLowerCase().includes(input) ? '' : 'none'; }); }
+
+        function viewProfile(mId) {
+            new bootstrap.Modal(document.getElementById('profileModal')).show();
+            google.script.run.withSuccessHandler(data => {
+                let curHtml = ''; if (data.current.length === 0) curHtml = '<div class="text-muted small">No books currently issued.</div>'; else data.current.forEach(c => curHtml += `<div><i class="bi bi-book text-danger"></i> <b>${c.book}</b> (Issued: ${c.issueDate}, Due: ${c.dueDate})</div>`); document.getElementById('profCurrent').innerHTML = curHtml;
+                let histHtml = ''; if (data.history.length === 0) histHtml = '<div class="text-muted small">No past history.</div>'; else data.history.forEach(h => histHtml += `<div><i class="bi bi-check-circle text-success"></i> <b>${h.book}</b> (Issued: ${h.issueDate}) ${h.fine > 0 ? '<span class="text-danger small">Fine: ₹' + h.fine + '</span>' : ''}</div>`); document.getElementById('profHistory').innerHTML = histHtml;
+            }).getMemberProfileData(mId);
+        }
+
+        // Circulation: Issue / Return / Renew / Reserve
+        function submitIssue(e, override = false) {
+            if (e) e.preventDefault();
+            let bId = document.getElementById('issueBookId').value;
+            let mId = document.getElementById('issueMemberId').value;
+            let btn = document.getElementById('issueBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Processing...';
+
+            google.script.run
+                .withSuccessHandler(res => {
+                    btn.disabled = false;
+                    btn.innerHTML = 'Issue Book';
+                    if (res.startsWith("WARNING:")) {
+                        btn.disabled = true;
+                        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Confirming...';
+                        Swal.fire({
+                            title: 'ശ്രദ്ധിക്കുക!',
+                            text: res.replace("WARNING: ", ""),
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonText: 'Allow (Admin)'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                submitIssue(null, true);
+                            } else {
+                                btn.disabled = false;
+                                btn.innerHTML = 'Issue Book';
+                            }
+                        });
+                    } else if (res.includes("Error")) {
+                        showError(res);
+                    } else {
+                        showSuccess(res);
+                        document.getElementById('issueForm').reset();
+                        loadDashboardData();
+                    }
+                })
+                .withFailureHandler(err => {
+                    btn.disabled = false;
+                    btn.innerHTML = 'Issue Book';
+                    showError("Connection failure: " + err);
+                })
+                .issueBookToStudent(bId, mId, override);
+        }
+
+        function submitReturn(e) {
+            e.preventDefault();
+            let btn = document.getElementById('returnBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Processing...';
+
+            google.script.run
+                .withSuccessHandler(res => {
+                    btn.disabled = false;
+                    btn.innerHTML = 'Return & Calc Fine';
+                    if (res.includes("Error")) {
+                        showError(res);
+                    } else {
+                        showSuccess(res);
+                        document.getElementById('returnForm').reset();
+                        loadDashboardData();
+                        loadFineDetails();
+                    }
+                })
+                .withFailureHandler(err => {
+                    btn.disabled = false;
+                    btn.innerHTML = 'Return & Calc Fine';
+                    showError("Connection failure: " + err);
+                })
+                .returnBookFromStudent(document.getElementById('returnBookId').value, document.getElementById('returnMemberId').value);
+        }
+
+        function submitRenew(e) {
+            e.preventDefault();
+            let bId = document.getElementById('renewBookId').value;
+            let mId = document.getElementById('renewMemberId').value;
+            let btn = document.getElementById('renewBtn');
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Renewing...';
+            btn.disabled = true;
+
+            google.script.run
+                .withSuccessHandler(res => {
+                    btn.innerHTML = 'Renew Book';
+                    btn.disabled = false;
+                    if (res.includes("Error")) {
+                        showError(res);
+                    } else {
+                        showSuccess(res);
+                        document.getElementById('renewForm').reset();
+                        loadDashboardData();
+                    }
+                })
+                .withFailureHandler(err => {
+                    btn.innerHTML = 'Renew Book';
+                    btn.disabled = false;
+                    showError("Connection failure: " + err);
+                })
+                .renewBook(bId, mId);
+        }
+
+
+        // Settings & Fines
+        function loadSettings() {
+            google.script.run.withSuccessHandler(s => {
+                document.getElementById('setDays').value = s.maxDays;
+                document.getElementById('setFine').value = s.finePerDay;
+                document.getElementById('setPass').value = s.password || "admin123";
+                if (s.password) cachedAdminPassword = s.password;
+            }).getSystemSettings();
+        }
+        function submitSettings(e) {
+            e.preventDefault();
+            let btn = document.getElementById('saveSetBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Saving...';
+
+            let maxDays = document.getElementById('setDays').value;
+            let fine = document.getElementById('setFine').value;
+            let pass = document.getElementById('setPass').value;
+
+            google.script.run
+                .withSuccessHandler(res => {
+                    btn.disabled = false;
+                    btn.innerHTML = 'Save Rules';
+                    showSuccess(res);
+                    cachedAdminPassword = pass;
+                })
+                .withFailureHandler(err => {
+                    btn.disabled = false;
+                    btn.innerHTML = 'Save Rules';
+                    showError("Connection failure: " + err);
+                })
+                .updateSystemSettings(maxDays, fine, pass);
+        }
+        function loadFineDetails() {
+            google.script.run.withSuccessHandler(data => {
+                document.getElementById('totalPaidFine').innerText = '₹' + data.paidAmount;
+                document.getElementById('totalUnpaidFine').innerText = '₹' + data.unpaidAmount;
+                let tbody = document.getElementById('unpaidFinesBody');
+                if (data.list.length === 0) { tbody.innerHTML = '<tr><td colspan="4" class="text-center text-success py-4">No unpaid fines!</td></tr>'; return; }
+                let html = '';
+                data.list.forEach(f => { html += `<tr><td><div class="fw-bold">${f.memberName}</div><div class="small text-muted">ID: ${f.memberId}</div></td><td class="text-muted">${f.bookId}</td><td class="fw-bold text-danger">₹${f.amount}</td><td class="hide-in-pdf"><button class="btn btn-sm btn-success rounded-pill px-3" onclick="payFine('${f.transId}')">Mark Paid</button></td></tr>`; });
+                tbody.innerHTML = html;
+            }).getFineDetails();
+        }
+        function payFine(transId) { Swal.fire({ title: 'Confirm Payment?', text: "Ensure amount is received.", icon: 'question', showCancelButton: true, confirmButtonColor: '#10b981', confirmButtonText: 'Paid!' }).then((result) => { if (result.isConfirmed) { google.script.run.withSuccessHandler(res => { showSuccess(res); loadFineDetails(); }).markFineAsPaid(transId); } }); }
+
+        // PDF Download
+        function downloadPDF(elementId, fileName) { const element = document.getElementById(elementId); const originalStyle = element.getAttribute('style') || ''; element.setAttribute('style', 'background-color: #ffffff !important; padding: 25px !important; display: block !important; border-radius: 0 !important; color: #000 !important;'); const titleElement = element.querySelector('.pdf-title'); if (titleElement) titleElement.style.display = 'block'; const hideItems = element.querySelectorAll('.hide-in-pdf'); hideItems.forEach(el => el.style.display = 'none'); const opt = { margin: 0.5, filename: fileName + '.pdf', image: { type: 'jpeg', quality: 1 }, html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff', scrollY: 0 }, jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } }; html2pdf().set(opt).from(element).save().then(() => { if (titleElement) titleElement.style.display = 'none'; hideItems.forEach(el => el.style.display = ''); element.setAttribute('style', originalStyle); }); }
+
+        // --- PWA Installation Logic ---
+        let deferredPrompt;
+
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./service-worker.js')
+                    .then(reg => console.log('SW registered successfully:', reg.scope))
+                    .catch(err => console.error('SW registration failed:', err));
+            });
+        }
+
+        // Intercept browser installation prompt
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+
+            // Show the install UI elements
+            const banner = document.getElementById('pwaInstallBanner');
+            const navItem = document.getElementById('installNavbarItem');
+            if (banner) banner.classList.remove('d-none');
+            if (navItem) navItem.classList.remove('d-none');
+        });
+
+        // Trigger PWA installation
+        function triggerPwaInstall() {
+            if (!deferredPrompt) return;
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('User accepted the install prompt');
+                    hideInstallUI();
+                } else {
+                    console.log('User dismissed the install prompt');
+                }
+                deferredPrompt = null;
+            });
+        }
+
+        function hideInstallUI() {
+            const banner = document.getElementById('pwaInstallBanner');
+            const navItem = document.getElementById('installNavbarItem');
+            if (banner) banner.classList.add('d-none');
+            if (navItem) navItem.classList.add('d-none');
+        }
+
+        // Hide install UI after successful installation
+        window.addEventListener('appinstalled', (evt) => {
+            console.log("IQRA'A Library app was successfully installed!");
+            hideInstallUI();
+            showSuccess("IQRA'A Library App വിജയകരമായി ഇൻസ്റ്റാൾ ചെയ്തു!");
+        });
+    </script>
+</body>
+
+</html>

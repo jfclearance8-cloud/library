@@ -1,0 +1,24 @@
+{
+  "name": "IQRA'A Library",
+  "short_name": "IQRA'A Library",
+  "description": "Premium Library Management System for IQRA'A College Library",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f1f5f9",
+  "theme_color": "#01BEFE",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "idcon.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any"
+    },
+    {
+      "src": "idcon.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any"
+    }
+  ]
+}
