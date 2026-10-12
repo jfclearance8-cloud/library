@@ -2,25 +2,16 @@
 
 ഈ പതിപ്പ് jfclearance8-cloud/library-യുടെ upgrade branch-ലാണ്. Google Apps Script backend update/deployment ഇനിയും ആവശ്യമാണ്. Books, Members, Transactions എന്നിവയിലെ നിലവിലുള്ള ഡാറ്റയും കോളങ്ങളുടെ ക്രമവും ഉപയോഗിക്കുന്ന പുതുക്കിയ കോഡാണ് ഈ പാക്കേജ്. നിലവിലുള്ള റെക്കോർഡുകളുടെ migration അല്ലെങ്കിൽ bulk rewrite ഇല്ല.
 
-## Google Apps Script വഴി ഉപയോഗിക്കുക (ആദ്യം ഈ വഴി പരീക്ഷിക്കുക)
+## നിങ്ങളുടെ app-ന്റെ ഘടന
 
-1. നിങ്ങളുടെ Google Sheet തുറക്കുക: https://docs.google.com/spreadsheets/d/1NCyiWI_gScUp4x_aoHZq06OF7YHKocRtUiE-UiXl7SU/edit
-2. Extensions → Apps Script തുറക്കുക. നിലവിലെ കോഡിന്റെ ഒരു കോപ്പി സൂക്ഷിക്കുക.
-3. `Code.gs`-ലെ ഉള്ളടക്കം പാക്കേജിലുള്ള `Code.gs` കൊണ്ട് മാറ്റുക. പഴയ അതേ പേരിലുള്ള functions മറ്റു `.gs` ഫയലുകളിൽ ആവർത്തിച്ച് നിലനിർത്തരുത്.
-4. Apps Script-ൽ `Index` എന്ന പേരിൽ HTML ഫയൽ സൃഷ്ടിക്കുക. അതിൽ ഈ പാക്കേജിലുള്ള `index.html`-ന്റെ മുഴുവൻ ഉള്ളടക്കം പേസ്റ്റ് ചെയ്യുക. നിലവിലെ Index ഫയൽ ഉണ്ടെങ്കിൽ അതിൽ മാറ്റുക.
-5. Project Settings-ൽ timezone `Asia/Kolkata` ആണെന്ന് ഉറപ്പാക്കുക.
-6. Deploy → Manage deployments → Edit → New version → Deploy. പുതിയ deployment ആണെങ്കിൽ Web app തിരഞ്ഞെടുക്കുക; Execute as: Me, ആവശ്യമായ access തിരഞ്ഞെടുക്കുക. ആവശ്യപ്പെട്ടാൽ Google authorization പൂർത്തിയാക്കുക.
-7. ലഭിക്കുന്ന `/exec` ലിങ്ക് തുറക്കുക. ഇവിടെ native Google Apps Script connection ഉപയോഗിക്കുന്നതിനാൽ `WEB_APP_URL` മാറ്റേണ്ടതില്ല.
-8. Admin തുറന്ന് നിലവിലെ Settings-ലെ Admin Password ഉപയോഗിച്ച് sign in ചെയ്യുക. Settings-ൽ പാസ്‌വേഡ് ശൂന്യമായി വിട്ടാൽ നിലവിലെ പാസ്‌വേഡ് തുടരും. Settings-ൽ password നൽകിയിട്ടില്ലെങ്കിൽ പഴയ fallback `admin123` ആണ്; അത് മാറ്റാം.
+GitHub-ലെ `index.html` → Google Apps Script-ലെ `Code.gs` → നിലവിലെ Google Sheet.
 
-## GitHub Pages വഴി ഉപയോഗിക്കുക
-
-ആദ്യം മുകളിൽ പറഞ്ഞ backend code deploy ചെയ്യണം. ശേഷം:
-
-1. `index.html`-ലെ `WEB_APP_URL`-ൽ മുകളിൽ deploy ചെയ്ത അതേ project-ന്റെ `/exec` ലിങ്ക് നൽകുക. ലഭിച്ച source-ലെ പഴയ URL പാക്കേജിൽ നിലനിർത്തിയിട്ടുണ്ട്; അത് നൽകിയ ഷീറ്റിനെയാണ് ഉപയോഗിക്കുന്നതെന്ന് പരിശോധിച്ചിട്ടില്ല.
-2. GitHub Pages repository-യിൽ `index.html`, `manifest.json`, `service-worker.js`, `idcon.jpg`, `idcon.png` മാറ്റുക/ചേർക്കുക.
-3. പഴയ service worker cache നിലനിൽക്കുന്നുണ്ടെങ്കിൽ browser-ൽ ആ സൈറ്റിന്റെ service worker unregister ചെയ്ത് ഒരിക്കൽ reload ചെയ്യുക. പുതിയ പതിപ്പ് HTML network-first ആയി ലോഡ് ചെയ്യുന്നു; payment/book/member API responses cache ചെയ്യില്ല.
-4. `jfclearance8-cloud/library`-യിലെ Pull Request backend deployment പൂർത്തിയാക്കിയ ശേഷം merge ചെയ്യുക.
+1. Sheet-ൽ Extensions → Apps Script തുറക്കുക. പഴയ കോഡ് backup എടുത്ത് ഈ repository-യിലെ `Code.gs` paste ചെയ്ത് Save ചെയ്യുക.
+2. Apps Script-ൽ `Index.html` ആവശ്യമില്ല. HTML GitHub-ലാണ്.
+3. Deploy → Manage deployments → Edit → New version → Deploy ചെയ്യുക. പഴയ deployment update ചെയ്താൽ `/exec` URL തുടരും.
+4. പുതിയ URL ലഭിച്ചാൽ `index.html`-ലെ `WEB_APP_URL` മാറ്റുക.
+5. Backend deploy ചെയ്ത ശേഷം GitHub upgrade merge ചെയ്യാം. GitHub commit ചെയ്തതുകൊണ്ട് Code.gs Google-ൽ auto deploy ആവില്ല.
+6. നിലവിലെ Settings-ലെ Admin Password ഉപയോഗിക്കുക. Settings-ൽ പുതിയ password field ശൂന്യമായി വിട്ടാൽ നിലവിലെ password തുടരും.
 
 ## പരിഹരിച്ച കാര്യങ്ങൾ
 

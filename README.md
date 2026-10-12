@@ -5,10 +5,9 @@ Responsive library management interface with a Google Sheets / Apps Script backe
 ## Deployment order
 
 1. Follow [Malayalam installation instructions](INSTALL_MALAYALAM.md) to install Code.gs in the Apps Script project bound to the existing Sheet.
-2. Add an Apps Script HTML file named Index with the contents of index.html.
-3. Deploy a new version of the backend and confirm the /exec URL.
-4. Update WEB_APP_URL in index.html if the deployment URL changes.
-5. Merge this upgrade branch and use the existing GitHub Pages publishing configuration.
+2. Deploy a new version of the backend and confirm the /exec URL.
+3. Update WEB_APP_URL in index.html if the deployment URL changes.
+4. Merge this upgrade branch and use the existing GitHub Pages publishing configuration.
 
 The new frontend requires the new backend session API. Updating GitHub does not automatically deploy Code.gs to Google Apps Script.
 

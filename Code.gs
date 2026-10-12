@@ -1,8 +1,5 @@
 function doGet(e) {
-    if (e && e.parameter && e.parameter.health === "1") {
-        return ContentService.createTextOutput(JSON.stringify({status:"success", message:"IQRAA backend ready"})).setMimeType(ContentService.MimeType.JSON);
-    }
-    return HtmlService.createHtmlOutputFromFile("Index").setTitle("IQRA'A Library").addMetaTag("viewport", "width=device-width, initial-scale=1");
+    return ContentService.createTextOutput(JSON.stringify({status: "success", message: "IQRAA backend ready"})).setMimeType(ContentService.MimeType.JSON);
 }
 function testConnection() {
     return "Connection Successful!";
