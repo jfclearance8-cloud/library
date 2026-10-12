@@ -807,6 +807,32 @@
     .splash-enter{background:linear-gradient(110deg,#536cdd,#7b62c6)}
     @media(max-width:575px){.stat-card{min-height:140px}.book-filter-panel{padding:14px;gap:10px}.book-filter-panel>div{min-width:120px;max-width:none}.book-filter-panel #bookResultCount{font-size:.75rem}}
     </style>
+
+    <style id="compact-library-layout">
+    body{font-size:13px;padding-top:80px}
+    .workspace-header{height:60px;padding:0 20px;gap:20px}.workspace-brand{font-size:1.05rem;width:168px}.workspace-brand img{width:28px;height:28px}
+    .workspace-sidebar{top:60px;width:192px;padding:18px 10px}.workspace-sidebar .nav-link{padding:10px 12px!important;font-size:.8rem;gap:8px}.workspace-sidebar .navbar-nav{gap:5px}
+    body>.container{margin-left:192px;width:calc(100% - 192px);padding:0 22px 24px!important}
+    .section-title{font-size:1.15rem}.workspace-subtitle{font-size:.75rem;margin-top:2px}.workspace-eyebrow{font-size:.6rem;margin-bottom:2px}
+    .page-section>.d-flex:first-child{margin-bottom:16px!important}.page-section .row{--bs-gutter-x:1rem;--bs-gutter-y:1rem}
+    .page-section .mb-5{margin-bottom:22px!important}.page-section .mb-4{margin-bottom:18px!important}.page-section .mt-5{margin-top:24px!important}
+    .stat-card{min-height:120px!important;padding:15px 18px!important}.stat-card .icon-box{width:27px;height:27px;margin-bottom:9px;font-size:.9rem}.stat-info h2{font-size:1.7rem}.stat-info h6{font-size:.62rem;margin-bottom:4px}
+    .analytics-card{padding:16px!important}.analytics-card h5{font-size:.85rem;margin-bottom:12px;padding-bottom:10px}.action-card{padding:18px!important}
+    .btn{min-height:34px;padding:6px 11px;font-size:.8rem}.record-actions .btn{min-height:30px;font-size:.74rem;padding:4px 8px}
+    .form-control,.form-select,.search-box{min-height:38px;font-size:.85rem}.table-modern tbody td{padding:10px 12px;font-size:.82rem}.table-modern thead th{padding:10px 12px;font-size:.67rem}
+    .badge-custom{font-size:.72rem;padding:4px 7px}.list-group-item{padding-top:8px;padding-bottom:8px}.icon-box{min-width:42px;height:42px;font-size:1.2rem}
+    .book-toolbar{display:flex;align-items:center;gap:8px;margin:0 0 14px;flex-wrap:wrap}
+    .book-search-field{position:relative;flex:1;min-width:220px}.book-search-field .bi-search{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#8896b3;font-size:.85rem}.book-search-field input{padding-left:34px}
+    .book-toolbar>.form-select{width:126px;flex:0 0 126px;padding:6px 30px 6px 10px;min-height:38px;font-size:.8rem}
+    .book-toolbar>#bookCategoryFilter{width:164px;flex-basis:164px}.availability-toggle{display:flex;align-items:center;gap:6px;font-size:.78rem;color:#64718c;white-space:nowrap;margin:0;padding:0 3px}.availability-toggle input{margin:0;width:15px;height:15px}
+    .book-toolbar .btn{min-width:36px;min-height:36px;padding:6px}.book-toolbar>#bookResultCount{font-size:.73rem;color:#8190aa;white-space:nowrap}
+    #booksPrintArea,#membersPrintArea{padding:0!important}
+    @media(min-width:1600px){body>.container{padding-left:28px!important;padding-right:28px!important}}
+    @media(max-width:1199px) and (min-width:992px){.workspace-sidebar{width:176px}.workspace-brand{width:152px}body>.container{margin-left:176px;width:calc(100% - 176px);padding-left:18px!important;padding-right:18px!important}.book-toolbar>#bookResultCount{flex-basis:100%;text-align:right}}
+    @media(max-width:991px){body{padding-top:118px}.workspace-header{height:60px;padding:0 14px}.workspace-brand{width:auto}.workspace-sidebar{top:60px;width:100%;padding:6px 14px}.workspace-sidebar .nav-link{padding:9px 12px!important}body>.container{margin:0;width:100%;padding:0 14px 20px!important}.workspace-sidebar #nav-transactions{padding-top:9px!important}.book-toolbar>#bookResultCount{flex-basis:auto;text-align:left}}
+    @media(max-width:575px){body{padding-top:112px}.workspace-header{padding:0 10px;gap:10px}.workspace-brand{font-size:.86rem}.workspace-brand img{width:24px;height:24px}.workspace-sidebar{padding:5px 10px}body>.container{padding:0 10px 18px!important}.analytics-card{padding:12px!important}.stat-card{min-height:108px!important;padding:13px!important}.stat-info h2{font-size:1.55rem}.workspace-search input,.form-control,.form-select{font-size:16px}.book-search-field{min-width:0;flex-basis:100%}.book-toolbar>.form-select{width:auto;flex:1 1 105px;font-size:16px;min-width:0}.book-toolbar>#bookCategoryFilter{width:auto;flex:1 1 140px}.availability-toggle{font-size:.74rem}.book-toolbar>#bookResultCount{margin-left:auto}.table-modern tbody td{min-width:78px;padding:9px;font-size:.8rem}.table-modern tbody td:nth-child(2){min-width:155px}.section-title{font-size:1.05rem}}
+    @media print{body{padding:0}body>.container{margin:0;width:100%}}
+    </style>
 </head>
 
 <body>
@@ -1006,27 +1032,12 @@
                 </div>
             </div>
 
-            <div class="mb-4 d-flex flex-column flex-md-row gap-3">
-                <div class="position-relative flex-grow-1">
-                    <i class="bi bi-search position-absolute top-50 translate-middle-y text-primary fs-5"
-                        style="left: 20px;"></i>
-                    <input type="text" id="searchBookInput" class="search-box ps-5"
-                        placeholder="Book name / Manglish / ID — ഉദാ: njan, ab" onkeyup="searchBooks()">
-                </div>
-                <div class="bg-white px-4 py-2 rounded-pill border shadow-sm d-inline-flex align-items-center">
-                    <div class="form-check form-switch mb-0 d-flex align-items-center gap-2">
-                        <input class="form-check-input fs-5 m-0" type="checkbox" role="switch" id="availFilter"
-                            onchange="searchBooks()">
-                        <label class="form-check-label fw-bold text-muted m-0 pt-1" for="availFilter"
-                            style="cursor:pointer; white-space:nowrap;">Available Books മാത്രം</label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="book-filter-panel hide-in-pdf">
-                <div><label for="bookPrefixFilter">BOOK CODE</label><select id="bookPrefixFilter" class="form-select" onchange="searchBooks()"><option value="">All codes</option></select></div>
-                <div><label for="bookCategoryFilter">CATEGORY</label><select id="bookCategoryFilter" class="form-select" onchange="searchBooks()"><option value="">All categories</option></select></div>
-                <button class="btn btn-light border" type="button" onclick="resetBookFilters()"><i class="bi bi-arrow-counterclockwise me-1"></i> Reset</button>
+            <div class="book-toolbar hide-in-pdf">
+                <div class="book-search-field"><i class="bi bi-search" aria-hidden="true"></i><input type="search" id="searchBookInput" class="form-control" placeholder="Book / Manglish / ID" aria-label="Search books" oninput="searchBooks()"></div>
+                <select id="bookPrefixFilter" class="form-select" aria-label="Book code" onchange="searchBooks()"><option value="">All codes</option></select>
+                <select id="bookCategoryFilter" class="form-select" aria-label="Category" onchange="searchBooks()"><option value="">All categories</option></select>
+                <label class="availability-toggle" for="availFilter"><input type="checkbox" class="form-check-input" id="availFilter" onchange="searchBooks()"> Available</label>
+                <button class="btn btn-light border" type="button" onclick="resetBookFilters()" title="Reset filters" aria-label="Reset filters"><i class="bi bi-arrow-counterclockwise"></i></button>
                 <span id="bookResultCount" role="status" aria-live="polite"></span>
             </div>
             <div class="glass-panel analytics-card">
