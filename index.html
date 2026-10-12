@@ -1554,7 +1554,7 @@
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label class="small fw-bold text-muted mb-1">Book ID (മാറ്റാൻ സാധിക്കില്ല)</label>
-                                <input type="text" class="form-control bg-light fw-bold" id="editBkId" readonly>
+                                <input type="text" class="form-control bg-light fw-bold" id="editBkId" required>
                             </div>
                             <div class="col-md-6">
                                 <label class="small fw-bold text-muted mb-1">Rack No</label>
@@ -1639,7 +1639,7 @@
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label class="small fw-bold text-muted mb-1">Student ID (മാറ്റാൻ സാധിക്കില്ല)</label>
-                                <input type="text" class="form-control bg-light fw-bold" id="editMemId" readonly>
+                                <input type="text" class="form-control bg-light fw-bold" id="editMemId" required>
                             </div>
                             <div class="col-md-6">
                                 <label class="small fw-bold text-muted mb-1">Class / Dept</label>
@@ -2252,6 +2252,7 @@
             if (!book) return;
 
             document.getElementById('editBkId').value = book.id;
+            document.getElementById('editBkId').dataset.originalId = String(book.id);
             document.getElementById('editBkRack').value = book.rack || "";
             document.getElementById('editBkTitle').value = book.title || "";
             document.getElementById('editBkAuthor').value = book.author || "";
@@ -2264,15 +2265,16 @@
             new bootstrap.Modal(document.getElementById('editBookModal')).show();
         }
 
-        function submitEditBook(e) {
+        async function submitEditBook(e) {
             e.preventDefault();
             let btn = document.getElementById('editSaveBtn');
             if (btn.disabled) return;
             btn.disabled = true;
             btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Updating...';
 
-            let bId = document.getElementById('editBkId').value;
+            let bId = document.getElementById('editBkId').dataset.originalId;
             let bData = {
+                newBookId: document.getElementById('editBkId').value.trim(),
                 title: document.getElementById('editBkTitle').value,
                 author: document.getElementById('editBkAuthor').value,
                 category: document.getElementById('editBkCategory').value,
@@ -2281,6 +2283,7 @@
                 type: document.getElementById('editBkType').value
             };
 
+            if(bData.newBookId !== bId && !await checkIdEditBackend(btn,'Update Book')) return;
             google.script.run
                 .withSuccessHandler(res => {
                     btn.disabled = false;
@@ -2288,6 +2291,7 @@
                     safeHideModal('editBookModal');
                     loadBooksTable();
                     loadDashboardData();
+                    loadIdentityData();
                     showSuccess(res);
                 })
                 .withFailureHandler(err => {
@@ -2300,24 +2304,27 @@
 
         function openEditMemberModal(mId, mName, mClass) {
             document.getElementById('editMemId').value = mId;
+            document.getElementById('editMemId').dataset.originalId = String(mId);
             document.getElementById('editMemName').value = mName;
             document.getElementById('editMemClass').value = mClass;
             new bootstrap.Modal(document.getElementById('editMemberModal')).show();
         }
 
-        function submitEditMember(e) {
+        async function submitEditMember(e) {
             e.preventDefault();
             let btn = document.getElementById('editSaveMemBtn');
             if (btn.disabled) return;
             btn.disabled = true;
             btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Updating...';
 
-            let mId = document.getElementById('editMemId').value;
+            let mId = document.getElementById('editMemId').dataset.originalId;
             let mData = {
+                newMemberId: document.getElementById('editMemId').value.trim(),
                 name: document.getElementById('editMemName').value,
                 className: document.getElementById('editMemClass').value
             };
 
+            if(mData.newMemberId !== mId && !await checkIdEditBackend(btn,'Update Student')) return;
             google.script.run
                 .withSuccessHandler(res => {
                     btn.disabled = false;
@@ -2325,6 +2332,7 @@
                     safeHideModal('editMemberModal');
                     loadMembersTable();
                     loadDashboardData();
+                    loadIdentityData();
                     showSuccess(res);
                 })
                 .withFailureHandler(err => {
@@ -2618,6 +2626,10 @@
             if(result.isConfirmed && result.value){loadFineDetails();showSuccess(result.value);}
         }
 
+        async function checkIdEditBackend(button,label){
+            try{const capability=await requestApi('getCapabilities');if(!capability.editRecordIds)throw new Error('Backend update required');return true;}
+            catch(error){button.disabled=false;button.textContent=label;showError('ID editing requires the updated Code.gs to be deployed in Google Apps Script. Other edits still work.');return false;}
+        }
         // PDF Download
         let pdfExportBusy=false;
         async function downloadPDF(elementId,fileName){
