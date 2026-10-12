@@ -783,6 +783,30 @@
     @media(max-width:575px){.workspace-header{height:68px;padding:0 12px;gap:12px}.workspace-brand{font-size:.88rem;gap:6px}.workspace-brand img{width:25px;height:25px}.workspace-brand span{max-width:96px;line-height:1.2}.workspace-search form{padding:7px 8px;gap:6px}.workspace-search input{font-size:16px}.workspace-search button{display:none}.workspace-sidebar{top:68px;padding:8px 12px}body{padding-top:132px}body>.container{padding-left:12px!important;padding-right:12px!important}.stat-card{padding:16px;min-height:135px}.stat-card .icon-box{width:29px;height:29px;margin-bottom:10px}.stat-info h2{font-size:1.8rem}.stat-info h6{font-size:.62rem}.workspace-subtitle{max-width:260px;line-height:1.55}.workspace-search-results{position:fixed;top:65px;left:12px;right:12px;max-height:60vh}.analytics-card{padding:16px}.splash-title{font-size:1.7rem}.splash-sponsor{font-size:.8rem}}
     @media print{.workspace-header,.workspace-sidebar{display:none!important}body{padding-top:0}body>.container{width:100%;margin:0;padding:0!important}}
     </style>
+
+    <style id="colorful-library-polish">
+    :root{--primary:#5266d8;--info:#5266d8}
+    body{background:#f3f6fc}.workspace-header{background:linear-gradient(110deg,#fff 20%,#f0f5ff 70%,#effcf9);border-bottom:1px solid #e2e9f6}
+    .workspace-brand{color:#293c75}.workspace-sidebar{background:linear-gradient(180deg,#fff,#f5f7ff);border-right-color:#e3e9f4}
+    .workspace-sidebar .nav-link.active{background:linear-gradient(120deg,#596ee0,#7963cf);color:#fff!important;box-shadow:0 6px 16px #586bd62b}
+    .workspace-sidebar .nav-link:hover:not(.active){background:#eaf0ff}.workspace-eyebrow{color:#6271b4}.section-title{color:#26376a}
+    .stat-card{border:0!important;min-height:162px;box-shadow:0 5px 18px #31457509;overflow:hidden}
+    .stat-card::after{content:'';position:absolute;width:90px;height:90px;border-radius:50%;right:-25px;top:-25px;background:#ffffff66;pointer-events:none}
+    #dashboard .col-6.col-lg-3:nth-child(1) .stat-card{background:linear-gradient(135deg,#eaf0ff,#dfe8ff)}
+    #dashboard .col-6.col-lg-3:nth-child(2) .stat-card{background:linear-gradient(135deg,#e4f8f2,#d2f1e9)}
+    #dashboard .col-6.col-lg-3:nth-child(3) .stat-card{background:linear-gradient(135deg,#fff5e5,#ffebc9)}
+    #dashboard .col-6.col-lg-3:nth-child(4) .stat-card{background:linear-gradient(135deg,#ffedf1,#ffdee6)}
+    .stat-card .icon-box{background:#ffffffb8!important;box-shadow:0 2px 6px #00000004}.stat-info h6{color:#60708d}.stat-info h2{color:#253d70}
+    #availableBooks{color:#167b64}#issuedBooks{color:#ae771d}#overdueCount{color:#bd4963}
+    .analytics-card{border:1px solid #e5eaf4;box-shadow:0 5px 20px #364d7706;border-radius:14px}.analytics-card h5{color:#394c7b;border-bottom:1px solid #edf0f8;padding-bottom:12px}
+    .badge-custom{background:#eff3ff!important;border:1px solid #e0e7fa;color:#4c5e96!important}.btn-gradient-primary,.btn-gradient-info{background:linear-gradient(110deg,#526bdb,#7562c9)!important;border:0}
+    .book-filter-panel{display:flex;flex-wrap:wrap;align-items:end;gap:14px;padding:18px 20px;margin-bottom:20px;background:linear-gradient(115deg,#edf2ff,#effbf8);border:1px solid #e0e7f6;border-radius:12px}
+    .book-filter-panel>div{min-width:180px;flex:1;max-width:340px}.book-filter-panel label{display:block;color:#667699;font-size:.65rem;font-weight:700;letter-spacing:.8px;margin-bottom:6px}
+    .book-filter-panel .form-select{background-color:white;border-color:#d8e2f4!important;min-height:42px}.book-filter-panel #bookResultCount{margin-left:auto;color:#607397;font-size:.8rem;align-self:center}
+    .table-modern thead th{background:#f0f4fc;color:#687a9b}.table-modern tbody tr:nth-child(even){background:#fafcff}.table-modern tbody tr:hover{background:#eff5ff}
+    .splash-enter{background:linear-gradient(110deg,#536cdd,#7b62c6)}
+    @media(max-width:575px){.stat-card{min-height:140px}.book-filter-panel{padding:14px;gap:10px}.book-filter-panel>div{min-width:120px;max-width:none}.book-filter-panel #bookResultCount{font-size:.75rem}}
+    </style>
 </head>
 
 <body>
@@ -987,7 +1011,7 @@
                     <i class="bi bi-search position-absolute top-50 translate-middle-y text-primary fs-5"
                         style="left: 20px;"></i>
                     <input type="text" id="searchBookInput" class="search-box ps-5"
-                        placeholder="Search by Book Title, Author or ID..." onkeyup="searchBooks()">
+                        placeholder="Book name / Manglish / ID — ഉദാ: njan, ab" onkeyup="searchBooks()">
                 </div>
                 <div class="bg-white px-4 py-2 rounded-pill border shadow-sm d-inline-flex align-items-center">
                     <div class="form-check form-switch mb-0 d-flex align-items-center gap-2">
@@ -999,6 +1023,12 @@
                 </div>
             </div>
 
+            <div class="book-filter-panel hide-in-pdf">
+                <div><label for="bookPrefixFilter">BOOK CODE</label><select id="bookPrefixFilter" class="form-select" onchange="searchBooks()"><option value="">All codes</option></select></div>
+                <div><label for="bookCategoryFilter">CATEGORY</label><select id="bookCategoryFilter" class="form-select" onchange="searchBooks()"><option value="">All categories</option></select></div>
+                <button class="btn btn-light border" type="button" onclick="resetBookFilters()"><i class="bi bi-arrow-counterclockwise me-1"></i> Reset</button>
+                <span id="bookResultCount" role="status" aria-live="polite"></span>
+            </div>
             <div class="glass-panel analytics-card">
                 <div id="booksPrintArea" class="bg-white p-2 rounded-4">
                     <h4 class="pdf-title fw-bold text-center mb-4 text-primary" style="display:none;">Library Inventory
@@ -1683,11 +1713,11 @@
                 const [books,members]=await Promise.all([requestApi('getAllBooks'),requestApi('getAllMembers')]);
                 if(version!==workspaceSearchVersion)return;results.replaceChildren();
                 const lower=query.toLocaleLowerCase();
-                const matchedBooks=books.filter(b=>[b.id,b.title,b.author,b.category].some(v=>String(v||'').toLocaleLowerCase().includes(lower))).slice(0,6);
+                const matchedBooks=books.filter(b=>matchesBook(b,query)).slice(0,6);
                 const matchedMembers=members.filter(m=>[m.id,m.name,m.className].some(v=>String(v||'').toLocaleLowerCase().includes(lower))).slice(0,6);
                 for(const [kind,items] of [['book',matchedBooks],['student',matchedMembers]])for(const item of items){
                     const button=document.createElement('button');button.type='button';button.textContent=(kind==='book'?'Book · ':'Student · ')+item.id+' — '+(item.title||item.name);
-                    button.addEventListener('click',()=>{const page=kind==='book'?'books':'members';const field=document.getElementById(kind==='book'?'searchBookInput':'searchMemberInput');field.value=String(item.id);results.hidden=true;showPage(page);});results.append(button);
+                    button.addEventListener('click',()=>{const page=kind==='book'?'books':'members';const field=document.getElementById(kind==='book'?'searchBookInput':'searchMemberInput');field.value=String(item.id);if(kind==='book'){document.getElementById('bookPrefixFilter').value='';document.getElementById('bookCategoryFilter').value='';document.getElementById('availFilter').checked=false;}results.hidden=true;showPage(page);});results.append(button);
                 }
                 if(!matchedBooks.length && !matchedMembers.length){const empty=document.createElement('p');empty.textContent='No matching books or students.';results.append(empty);}
             } catch(error){if(version!==workspaceSearchVersion)return;results.replaceChildren();status.textContent=error.message;results.append(status);}
@@ -1894,7 +1924,7 @@
                     <button class="btn btn-sm btn-outline-danger" data-action="book-delete" data-id="${escapeHtml(b.id)}">Delete</button></div></td>
                     </tr>`).join('') || '<tr><td colspan="5" class="text-center py-4">No books yet.</td></tr>';
                 populateCategoryDropdown([...books.map(b=>b.category),...cachedCategoriesWithPrefixes.map(c=>c.category)]);
-                searchBooks(); toggleAdminUIElements();
+                populateBookFilters(); searchBooks(); toggleAdminUIElements();
             }).catch(error => { if(version === booksLoadVersion) { tbody.innerHTML='<tr><td colspan="5" class="text-center py-4"><button class="btn btn-outline-primary" onclick="loadBooksTable()">Retry loading books</button></td></tr>'; showError(error.message); } });
         }
         function populateCategoryDropdown(categoriesArray) {
@@ -2215,11 +2245,42 @@
                 .addNewBook(bData);
         }
         function searchBooks() {
-            let input = document.getElementById('searchBookInput').value.toLowerCase(); let availOnly = document.getElementById('availFilter').checked;
-            document.querySelectorAll('#booksTableBody tr').forEach(row => {
-                let isAvail = Number(row.getAttribute('data-avail')) > 0; let match = row.innerText.toLowerCase().includes(input);
-                row.style.display = (match && (!availOnly || isAvail)) ? '' : 'none';
+            const query=document.getElementById('searchBookInput').value.trim(), available=document.getElementById('availFilter').checked;
+            const prefix=document.getElementById('bookPrefixFilter').value, category=document.getElementById('bookCategoryFilter').value;
+            const books=new Map(allBooksCache.map(b=>[String(b.id),b]));let count=0;
+            document.querySelectorAll('#booksTableBody tr[data-avail]').forEach(row=>{
+                const id=row.cells[0].textContent.trim(),book=books.get(id);if(!book)return;
+                const match=matchesBook(book,query) && (!prefix || bookPrefix(book.id)===prefix) && (!category || book.category===category) && (!available || Number(book.available)>0);
+                row.hidden=!match;row.style.display=match?'':'none';if(match)count++;
             });
+            document.getElementById('bookResultCount').textContent=count+' / '+allBooksCache.length+' books';
+        }
+        function resetBookFilters() {
+            document.getElementById('searchBookInput').value='';document.getElementById('bookPrefixFilter').value='';document.getElementById('bookCategoryFilter').value='';document.getElementById('availFilter').checked=false;searchBooks();
+        }
+        function bookPrefix(id){return (String(id).trim().match(/^[a-z]+/i)||[''])[0].toUpperCase();}
+        function populateBookFilters(){
+            for(const [id,values,label] of [['bookPrefixFilter',allBooksCache.map(b=>bookPrefix(b.id)),'All codes'],['bookCategoryFilter',allBooksCache.map(b=>b.category),'All categories']]){
+                const select=document.getElementById(id),previous=select.value;select.replaceChildren(new Option(label,''));
+                [...new Set(values.filter(Boolean))].sort((a,b)=>a.localeCompare(b)).forEach(value=>select.add(new Option(value,value)));
+                if(values.includes(previous))select.value=previous;
+            }
+        }
+        function romanizeMalayalam(value){
+            const letters={'അ':'a','ആ':'aa','ഇ':'i','ഈ':'ee','ഉ':'u','ഊ':'oo','ഋ':'ri','എ':'e','ഏ':'e','ഐ':'ai','ഒ':'o','ഓ':'o','ഔ':'au','ക':'k','ഖ':'kh','ഗ':'g','ഘ':'gh','ങ':'ng','ച':'ch','ഛ':'ch','ജ':'j','ഝ':'jh','ഞ':'nj','ട':'t','ഠ':'th','ഡ':'d','ഢ':'dh','ണ':'n','ത':'th','ഥ':'th','ദ':'d','ധ':'dh','ന':'n','പ':'p','ഫ':'ph','ബ':'b','ഭ':'bh','മ':'m','യ':'y','ര':'r','റ':'r','ല':'l','ള':'l','ഴ':'zh','വ':'v','ശ':'sh','ഷ':'sh','സ':'s','ഹ':'h','ൺ':'n','ൻ':'n','ർ':'r','ൽ':'l','ൾ':'l','ൿ':'k','ം':'m','ഃ':'h'};
+            const signs={'ാ':'aa','ി':'i','ീ':'ee','ു':'u','ൂ':'oo','ൃ':'ri','െ':'e','േ':'e','ൈ':'ai','ൊ':'o','ോ':'o','ൗ':'au','്':''};
+            const consonants='കഖഗഘങചഛജഝഞടഠഡഢണതഥദധനപഫബഭമയരറലളഴവശഷസഹ';
+            const chars=[...String(value||'').normalize('NFC')];let result='';
+            for(let i=0;i<chars.length;i++){
+                const ch=chars[i];if(consonants.includes(ch)){result+=letters[ch];if(Object.prototype.hasOwnProperty.call(signs,chars[i+1])){result+=signs[chars[++i]];}else result+='a';}
+                else if(ch==='‍'||ch==='‌')continue;else result+=letters[ch]??signs[ch]??ch;
+            }return result;
+        }
+        function phoneticKey(value){return romanizeMalayalam(value).toLowerCase().replace(/[^a-z0-9]/g,'').replace(/ee/g,'i').replace(/oo/g,'u').replace(/aa/g,'a').replace(/th/g,'t').replace(/dh/g,'d').replace(/kh/g,'k').replace(/gh/g,'g').replace(/bh/g,'b').replace(/ph/g,'f').replace(/sh/g,'s').replace(/zh/g,'l').replace(/nr/g,'nt').replace(/(.)\1+/g,'$1');}
+        function matchesBook(book,query){
+            if(!query)return true;const terms=query.toLowerCase().split(/\s+/).filter(Boolean);
+            const text=[book.id,book.title,book.author,book.category].map(v=>String(v||'').toLowerCase()).join(' '), roman=phoneticKey([book.title,book.author].join(' '));
+            return terms.every(term=>text.includes(term) || (phoneticKey(term).length>=2 && roman.includes(phoneticKey(term))));
         }
 
         function viewBookHistory(bId, bName) {
